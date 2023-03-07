@@ -1,22 +1,42 @@
 import React, { Component } from "react";
 import { Breadcrumb } from "@gull";
 import ReactPaginate from "react-paginate";
-import { Dropdown } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getTaskList } from "app/redux/actions/TaskActions";
+import Loading from "@gull";
 
 class TaskManagerList extends Component {
-  state = {
-    taskList: [
-      {
-        title: "Update User profile page",
-        link: "/",
-      },
-      {
-        title: "Not Update User profile page",
-        link: "/",
-      },
-    ],
-  };
+  constructor() {
+    super()
+    this.state = { loading:true,
+      taskList: [
+        {
+          title: "Update User profile page",
+          link: "/",
+        },
+        {
+          title: "Not Update User profile page",
+          link: "/",
+        },
+      ],
+
+    }
+  }
+  
+
+  componentDidMount(){
+    const timer = setTimeout(()=> {
+      this.setState({loading: false})
+   }, 5000);
+   
+   this.props.fetchTask();
+   return () => {
+     clearTimeout(timer);
+    
+  }
+}
 
   handlePageClick = (data) => {
     let currentPage = data.disabled;
@@ -25,6 +45,8 @@ class TaskManagerList extends Component {
 
   render() {
     let { taskList } = this.state;
+    {!this.state.loading && console.log(this.props.tasks)}
+    
 
     return (
       <div>
@@ -41,6 +63,7 @@ class TaskManagerList extends Component {
             {/* <!-- task manager table --> */}
             <div className="card" id="card">
               <div className="card-header bg-transparent ul-task-manager__header-inline">
+         
                 <h6 className="card-title task-title">Task Manager</h6>
               </div>
 
@@ -62,9 +85,19 @@ class TaskManagerList extends Component {
                         aria-label="Search"
                       />
                     </form>
+                    <label>
+                    <span   className="col-sm-2 col-form-label me-2">Group By</span>
+                    <select>
+                      <option value="15">Status</option>
+                      <option value="25">Cost</option>
+                      <option value="50">Priortiy</option>
+                      <option value="75">Type</option>
+                     
+                    </select>
+                  </label>
                   </nav>
 
-                  <label>
+                  {/* <label>
                     <span>Show:</span>
                     <select>
                       <option value="15">15</option>
@@ -73,7 +106,16 @@ class TaskManagerList extends Component {
                       <option value="75">75</option>
                       <option value="100">100</option>
                     </select>
-                  </label>
+                  </label> */}
+                   <Button
+                  variant="primary"
+                  className="btn-icon m-1 text-capitalize"
+                >
+                  <span className="ul-btn__icon">
+                    <i className="i-Gear-2"></i>
+                  </span>
+                  <span className="ul-btn__text">+ Task</span>
+                </Button>
                 </div>
 
                 <div className="table-responsive">
@@ -347,5 +389,17 @@ class TaskManagerList extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+      tasks: state.taskReducer.taskList,
+    
+  };
+};
 
-export default TaskManagerList;
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchTask: ()=> dispatch(getTaskList())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskManagerList);
