@@ -19,10 +19,11 @@ const headers = {
 
 export const  getTaskList = () => async  (dispatch) => {
   try{
- await axios.get("/api/resource/Task?q=proxy",
+ await axios.get(`/api/resource/Task?q=proxy&fields=["project", "type", "status", "priority","subject"]`,
   {
     headers: headers
   },
+  
  
   )
   

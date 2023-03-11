@@ -1,90 +1,117 @@
 import React, { Component } from "react";
 import { Breadcrumb } from "@gull";
 import { Dropdown, Accordion, Card } from "react-bootstrap";
+import { DragDropContext } from "react-beautiful-dnd";
+import {
+  Container,
+  DropContainer,
+  Legend,
+  ShowBadge,
+  Title
+} from "./task-dnd/components";
+import {data} from './task-dnd/data'
+import { connect } from "react-redux";
+import { getTaskList } from "app/redux/actions/TaskActions";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 
 class TaskManager extends Component {
   state = {
-    notificationList: [
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-      {
-        title: "#23. New icons set for an iOS app",
-        text: "corruptedcorrupted 2corrupted 2 20 January, 2015 ",
-        date: "20 January, 2015            ",
-      },
-    ],
-    itemPerPage: 6,
-    currentPage: 0,
+    
+   
+    ...data
+  };
+
+//   componentDidMount(){
+//     const timer = setTimeout(()=> {
+//       this.setState({loading: false})
+//    }, 5000);
+   
+//    this.props.fetchTask();
+//    return () => {
+//      clearTimeout(timer);
+    
+//   }
+// }
+
+
+
+  onDragEnd = ({ source, destination, draggableId }) => {
+    // dropped inside of the list
+    if (source && destination) {
+      this.setState(prevState => {
+        // source container index and id
+        console.log("Dropped")
+        const { index: sourceIndex, droppableId: sourceId } = source;
+        console.log(source)
+        // destination container index and id
+        const {
+          index: destinationIndex,
+          droppableId: destinationId
+        } = destination;
+        console.log(destination)
+        // source container object
+        const sourceContainer = prevState.columns.find(
+          column => column.id === sourceId
+        );
+
+        // desination container object
+        const destinationContainer = prevState.columns.find(
+          column => column.id === destinationId
+        );
+
+        // source container "userIds" array
+        const sourceIds = Array.from(sourceContainer.taskIds);
+
+        // destination container "userIds" array
+        const destinationIds = Array.from(destinationContainer.taskIds);
+
+        // check if source and destination container are the same
+        const isSameContainer = sourceContainer.id === destinationContainer.id;
+
+        //  remove a userId from the source "userIds" array via the sourceIndex
+        sourceIds.splice(sourceIndex, 1);
+
+        // add a userId (draggableId) to the source or destination "userIds" array
+        if (isSameContainer) {
+          sourceIds.splice(destinationIndex, 0, draggableId);
+        } else {
+          destinationIds.splice(destinationIndex, 0, draggableId);
+        }
+
+        // update the source container with changed sourceIds
+        const newSourceContainer = {
+          ...sourceContainer,
+          taskIds: sourceIds
+        };
+
+        // update the destination container with changed destinationIds
+        const newDestinationContainer = {
+          ...destinationContainer,
+          taskIds: destinationIds
+        };
+
+        // loop through current columns and update the source
+        // and destination containers
+        const columns = prevState.columns.map(column => {
+          if (column.id === newSourceContainer.id) {
+            return newSourceContainer;
+          } else if (
+            column.id === newDestinationContainer.id &&
+            !isSameContainer
+          ) {
+            return newDestinationContainer;
+          } else {
+            return column;
+          }
+        });
+
+        return {
+          ...prevState,
+          columns
+        };
+      });
+    }
   };
 
   handlePageClick = (data) => {
@@ -93,7 +120,8 @@ class TaskManager extends Component {
   };
 
   render() {
-    let { notificationList, currentPage, itemPerPage } = this.state;
+    let { notificationList, currentPage, itemPerPage, tasks, columns } = this.state;
+    
     return (
       <div>
         <Breadcrumb
@@ -192,7 +220,32 @@ class TaskManager extends Component {
         <div className="row">
           <div className="col-xl-9">
             <div className="row">
-              {notificationList
+            <Container>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          {/* <Legend>
+            <Title>Legend</Title>
+            {responses.map(response => (
+              <ShowBadge
+                key={response}
+                response={response}
+                style={{ fontSize: 17 }}
+                showLast
+              >
+                {response}
+              </ShowBadge>
+            ))}
+          </Legend> */}
+          {columns.map(({ id, title, taskIds }) => (
+            <DropContainer
+              id={id}
+              key={id}
+              title={title}
+              tasks={taskIds.map(id => tasks.find(task => task.id === id))}
+            />
+          ))}
+        </DragDropContext>
+      </Container>
+              {/* {notificationList
                 .slice(
                   currentPage * itemPerPage,
                   (currentPage + 1) * itemPerPage
@@ -344,7 +397,7 @@ class TaskManager extends Component {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))} */}
             </div>
 
             {/* <!-- pagination --> */}
@@ -367,7 +420,7 @@ class TaskManager extends Component {
             </div>
           </div>
 
-          <div className="col-xl-3 ">
+          <div className="col-xl-3">
             <Accordion className="mb-3" defaultActiveKey="search">
               <Accordion.Item eventKey="search">
                 <Accordion.Header className="w-100" eventKey="search">
@@ -721,5 +774,17 @@ class TaskManager extends Component {
     );
   }
 }
+
+// const mapStateToProps = (state) => {
+//   return {
+//       tasks: state.taskReducer.taskList,
+    
+//   };
+// };
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//       fetchTask: ()=> dispatch(getTaskList())
+//   };
+// };
 
 export default TaskManager;

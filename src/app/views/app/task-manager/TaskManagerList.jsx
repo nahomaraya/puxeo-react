@@ -45,7 +45,8 @@ class TaskManagerList extends Component {
 
   render() {
     let { taskList } = this.state;
-    {!this.state.loading && console.log(this.props.tasks)}
+    {this.state.loading && console.log("Loading...")}
+    {!this.state.loading && console.log(this.props.tasks.data)}
     
 
     return (
@@ -139,24 +140,20 @@ class TaskManagerList extends Component {
                         </th>
                       </tr>
                     </thead>
-                    <thead className="bg-light">
-                      <tr>
-                        <th colSpan="7">Last Week</th>
-                      </tr>
-                    </thead>
+                 
                     <tbody id="names">
-                      {taskList.map((task, ind) => (
+                      {!this.state.loading && this.props.tasks.data.map((task, ind) => (
                         <tr key={ind} id="names">
                           <th scope="row" className="head-width">
                             #{ind + 1}
                           </th>
                           <td className="collection-item">
                             <div className="font-weight-bold">
-                              <Link to={task.link}>{task.title}</Link>
+                              {/* <Link to={task.link}>{task.title}</Link> */}
+                              {task.project}
                             </div>
                             <div className="text-muted">
-                              A small river named Duden flows by their place and
-                              supplies it..
+                            {task.subject}
                             </div>
                           </td>
                           <td className="custom-align">
@@ -170,7 +167,7 @@ class TaskManagerList extends Component {
                                     className="btn btn-danger text-white custom-btn  btn-sm dropdown-toggle"
                                     type="button"
                                   >
-                                    Blocker
+                                   {task.priority}
                                   </button>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
@@ -202,7 +199,7 @@ class TaskManagerList extends Component {
                             </div>
                           </td>
                           <td className="custom-align">
-                            <select
+                            {/* <select
                               className="form-control custom-select task-manager-list-select"
                               id="inputGroupSelect01"
                             >
@@ -214,14 +211,11 @@ class TaskManagerList extends Component {
                               <option value="3">Invalid</option>
                               <option value="3">Wontfix</option>
                               <option value="3">Closed</option>
-                            </select>
+                            </select> */}
+                            {task.status}
                           </td>
                           <td className="custom-align">
-                            <img
-                              className="rounded-circle m-1 ul-task-manager__avatar "
-                              src="/assets/images/faces/1.jpg"
-                              alt=""
-                            />
+                          
                             <img
                               className="rounded-circle m-1 ul-task-manager__avatar "
                               src="/assets/images/faces/1.jpg"
@@ -254,11 +248,11 @@ class TaskManagerList extends Component {
                         </tr>
                       ))}
 
-                      <tr className="bg-light">
+                      {/* <tr className="bg-light">
                         <th colSpan="12">10 Days Ago</th>
                       </tr>
 
-                      {/* <!-- table row 3 --> */}
+                   
                       <tr>
                         <th scope="row">#3</th>
                         <td className="collection-item">
@@ -355,7 +349,7 @@ class TaskManagerList extends Component {
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
-                      </tr>
+                      </tr> */}
                       {/* <!-- end of table row 3 --> */}
                     </tbody>
                   </table>
