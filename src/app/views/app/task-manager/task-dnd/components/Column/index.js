@@ -5,7 +5,7 @@ export default styled.div`
     width: 100%;
   }
 
-  width: 272px;
+  width: 100%;
   min-height: 130px;
   background-color: #ebecf0;
   border-radius: 3px;

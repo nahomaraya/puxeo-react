@@ -17,9 +17,9 @@ import { Link } from "react-router-dom";
 
 class TaskManager extends Component {
   state = {
-    
+    groupBy :"status",
+    ...data,
    
-    ...data
   };
 
 //   componentDidMount(){
@@ -38,35 +38,53 @@ class TaskManager extends Component {
 
   onDragEnd = ({ source, destination, draggableId }) => {
     // dropped inside of the list
+ 
+    
     if (source && destination) {
       this.setState(prevState => {
-        // source container index and id
-        console.log("Dropped")
-        const { index: sourceIndex, droppableId: sourceId } = source;
-        console.log(source)
+        let initColumns = [];
+        let sourceContainer = [{}];
+        let destinationContainer = [{}] ;
+
+          // source container index and id
+      
+       
+      
         // destination container index and id
+
+        const { index: sourceIndex, droppableId: sourceId } = source;
         const {
           index: destinationIndex,
           droppableId: destinationId
         } = destination;
-        console.log(destination)
-        // source container object
-        const sourceContainer = prevState.columns.find(
-          column => column.id === sourceId
-        );
-
-        // desination container object
-        const destinationContainer = prevState.columns.find(
-          column => column.id === destinationId
-        );
+       
+          // source container object
+          // desination container object
+        if(this.state.groupBy=="priority"){
+          
+            sourceContainer = prevState.priorityColumns.find(column => column.id === sourceId)
+            destinationContainer =  prevState. priorityColumns.find( column => column.id === destinationId )
+        }
+        else if(this.state.groupBy=="status"){
+          sourceContainer = prevState.statusColumns.find(column => column.id === sourceId);
+          destinationContainer =  prevState.statusColumns.find( column => column.id === destinationId )
+          
+        }
+      
+      
+       
+      
+        
+        
 
         // source container "userIds" array
+       
         const sourceIds = Array.from(sourceContainer.taskIds);
 
         // destination container "userIds" array
         const destinationIds = Array.from(destinationContainer.taskIds);
 
-        // check if source and destination container are the same
+        // check if source and destination container are the sataskIdme
         const isSameContainer = sourceContainer.id === destinationContainer.id;
 
         //  remove a userId from the source "userIds" array via the sourceIndex
@@ -93,7 +111,9 @@ class TaskManager extends Component {
 
         // loop through current columns and update the source
         // and destination containers
-        const columns = prevState.columns.map(column => {
+        const statusColumns = 
+       
+        prevState.statusColumns.map(column => {
           if (column.id === newSourceContainer.id) {
             return newSourceContainer;
           } else if (
@@ -105,10 +125,28 @@ class TaskManager extends Component {
             return column;
           }
         });
+        const priorityColumns = 
+          prevState.priorityColumns.map(column => {
+            if (column.id === newSourceContainer.id) {
+              return newSourceContainer;
+            } else if (
+              column.id === newDestinationContainer.id &&
+              !isSameContainer
+            ) {
+              return newDestinationContainer;
+            } else {
+              return column;
+            }
+          })
 
+        
+        
+       
+        
         return {
           ...prevState,
-          columns
+          statusColumns,
+          priorityColumns
         };
       });
     }
@@ -120,7 +158,7 @@ class TaskManager extends Component {
   };
 
   render() {
-    let { notificationList, currentPage, itemPerPage, tasks, columns } = this.state;
+    let { notificationList, currentPage, itemPerPage, tasks, groupBy, statusColumns, priorityColumns  } = this.state;
     
     return (
       <div>
@@ -213,6 +251,15 @@ class TaskManager extends Component {
                   </Dropdown>
                 </ul>
               </div>
+              <label>
+                    <span   className="col-sm-2 col-form-label me-2">Group By</span>
+                    <select>
+                    <option value="15" onClick={() => {this.setState({groupBy:"status"}); console.log(this.state.groupBy)}}>Status</option>
+                    <option value="50"  onClick={() => {this.setState({groupBy:"priority"}); console.log(this.state.groupBy)}} defaultValue>Priortiy</option>
+                    
+                     
+                    </select>
+                  </label>
             </div>
           </div>
         </div>
@@ -235,7 +282,18 @@ class TaskManager extends Component {
               </ShowBadge>
             ))}
           </Legend> */}
-          {columns.map(({ id, title, taskIds }) => (
+         
+         {groupBy=="priority" && 
+          priorityColumns.map(({ id, title, taskIds }) => (
+            <DropContainer
+              id={id}
+              key={id}
+              title={title}
+              tasks={taskIds.map(id => tasks.find(task => task.id === id))}
+            />
+          ))}
+           {groupBy=="status" && 
+          statusColumns.map(({ id, title, taskIds }) => (
             <DropContainer
               id={id}
               key={id}

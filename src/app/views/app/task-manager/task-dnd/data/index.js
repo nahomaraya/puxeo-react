@@ -124,7 +124,8 @@ export const data = {
       project: "CherryFile", status: "Overdue", priority: "Medium"
     }
   ],
-  columns: [
+  priorityColumns: 
+ [
     {
       id: "tasks",
       title: "Tasks Pool",
@@ -155,14 +156,47 @@ export const data = {
       ]
     },
     {
-      id: "Medium",
-      title: "Medium",
-      taskIds: []
-    },
-    {
       id: "Low",
       title: "Low",
       taskIds: []
-    }
+    },
+    
+  ],
+  statusColumns: [
+    {
+      id: "tasks",
+      title: "Tasks Pool",
+      taskIds: [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        
+      ]
+    },
+    {
+      id: "Open",
+      title: "Open",
+      taskIds: []
+    },
+    {
+      id: "Completed",
+      title: "Completed",
+      taskIds: [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ]
+    },
+    {
+      id: "Overdue",
+      title: "Overdue",
+      taskIds: []
+    },
+    
   ]
 };
