@@ -1,4 +1,21 @@
 export const data = {
+  // {
+  //   "name": "TASK-2023-00001",
+  //   "subject": "Statutenwijziging doornemen / bespreken & ondertekenen",
+  //   "project": "PMVZW",
+  //   "type": null,
+  //   "status": "Completed",
+  //   "priority": "Medium",
+  //   "parent_task": null,
+  //   "department": null,
+  //   "color": "#29CD42",
+  //   "is_group": 0,
+  //   "exp_start_date": "2023-01-18",
+  //   "exp_end_date": "2023-01-26",
+  //   "expected_time": 0,
+  //   "total_costing_amount": 0,
+  //   "total_billing_amount": 0
+  // }
   itemPerPage: 6,
   currentPage: 0,
   notificationList: [
@@ -130,12 +147,7 @@ export const data = {
       id: "tasks",
       title: "Tasks Pool",
       taskIds: [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
+       
         
       ]
     },
@@ -148,11 +160,15 @@ export const data = {
       id: "High",
       title: "High",
       taskIds: [
-        "7",
-        "8",
-        "9",
-        "10",
-        "11"
+       
+        
+      ]
+    },
+    {
+      id: "Medium",
+      title: "Medium",
+      taskIds: [
+        
       ]
     },
     {
@@ -167,12 +183,7 @@ export const data = {
       id: "tasks",
       title: "Tasks Pool",
       taskIds: [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
+        
         
       ]
     },
@@ -185,11 +196,7 @@ export const data = {
       id: "Completed",
       title: "Completed",
       taskIds: [
-        "7",
-        "8",
-        "9",
-        "10",
-        "11"
+        
       ]
     },
     {

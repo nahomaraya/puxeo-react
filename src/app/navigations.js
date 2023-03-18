@@ -20,6 +20,134 @@ export const navigations = [
     ]
   },
   {
+    name: "ERP",
+    description: "Lorem ipsum dolor sit.",
+    type: "dropDown",
+    icon: "i-Library",
+    sub: [
+      {
+        icon: "i-One-Window",
+        name: "Module Name",
+        path: "/dashboard/v1",
+        type: "link",
+        sub: [
+          {
+            icon: "i-Receipt",
+            name: "Space 1",
+            path: "/task-manager",
+            type: "link",
+           
+            sub: [
+              {
+                icon: "i-Receipt",
+                name: "Folder 1",
+                type: "link",
+                path: "/task-manager",
+                sub: [
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 1",
+                    type: "link",
+                    path: "/task-project"
+                  },
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 2",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+
+                ]
+              },
+              {
+                icon: "i-Receipt",
+                name: "Folder 2",
+                type: "link",
+                path: "/todo/list",
+                sub: [
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 1",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 2",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+
+                ]
+              },
+              
+            ]
+          },
+          {
+            icon: "i-Receipt",
+            name: "Space 2",
+            type: "link",
+            path: "/task-manager",
+            sub: [
+              {
+                icon: "i-Receipt",
+                name: "Folder 1",
+                type: "link",
+                path: "/task-manager",
+                sub: [
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 1",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 2",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+
+                ]
+              },
+              {
+                icon: "i-Receipt",
+                name: "Folder 2",
+                type: "link",
+                path: "/todo/list",
+                sub: [
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 1",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+                  {
+                    icon: "i-Receipt",
+                    name: "Project 2",
+                    type: "link",
+                    path: "/todo/list"
+                  },
+
+                ]
+              },
+             
+              
+            ]
+          },
+          
+          
+        ]
+      },
+      {
+        icon: "i-Clock-4",
+        name: "Version 2",
+        path: "/dashboard/v2",
+        type: "link"
+      }
+    ]
+  },
+  {
     name: "UI kits",
     description: "Lorem ipsum dolor sit.",
     type: "dropDown",

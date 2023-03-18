@@ -8,6 +8,20 @@ import { Breadcrumb } from "@gull";
 import SimpleCard from "@gull/components/cards/SimpleCard";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+
+const Title = styled.h1`
+  font-size: 1.5em;
+  text-align: center;
+  color: palevioletred;
+`;
+
+// Create a Wrapper component that'll render a <section> tag with some styles
+const Wrapper = styled.section`
+  padding: 4em;
+  background: papayawhip;
+`;
 
 class Dashboard1 extends Component {
   state = {
@@ -171,7 +185,12 @@ class Dashboard1 extends Component {
           ]}
         ></Breadcrumb>
         <div className="row">
-          {cardList1.map((card, index) => (
+        <Wrapper>
+    <Title>
+      Hello World!
+    </Title>
+  </Wrapper>
+           {cardList1.map((card, index) => (
             <div key={index} className="col-lg-3 col-md-6 col-sm-6">
               <div className="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <div className="card-body text-center">

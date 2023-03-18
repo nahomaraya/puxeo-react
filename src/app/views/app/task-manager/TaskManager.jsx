@@ -15,24 +15,58 @@ import { getTaskList } from "app/redux/actions/TaskActions";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 
+
 class TaskManager extends Component {
   state = {
-    groupBy :"status",
+    groupBy :"priority",
+    grouped: false,
+    loading: true,
     ...data,
    
   };
 
-//   componentDidMount(){
-//     const timer = setTimeout(()=> {
-//       this.setState({loading: false})
-//    }, 5000);
+
+
+  componentDidMount(){
+    const timer = setTimeout(()=> {
+      this.setState({loading: false})
+   }, 5000);
    
-//    this.props.fetchTask();
-//    return () => {
-//      clearTimeout(timer);
+   this.props.fetchTask();
+ 
+   return () => {
+     clearTimeout(timer);
     
-//   }
-// }
+  }
+ 
+}
+
+   groupItems = (list,Columns ) => {
+    let columns = Columns;
+    
+    // this.setState(prevState => {
+  list.map((listItem, index)=> {
+      
+       columns.map(column => {
+            if(column.id == listItem.priority){
+            
+                column.taskIds.push(listItem.name)
+            
+              
+            }
+
+        })
+        
+      })
+    this.setState({grouped:true})
+      return columns;
+     
+    // })
+  
+
+ 
+  
+}
 
 
 
@@ -63,10 +97,12 @@ class TaskManager extends Component {
         if(this.state.groupBy=="priority"){
           
             sourceContainer = prevState.priorityColumns.find(column => column.id === sourceId)
+            console.log(sourceContainer)
             destinationContainer =  prevState. priorityColumns.find( column => column.id === destinationId )
         }
         else if(this.state.groupBy=="status"){
           sourceContainer = prevState.statusColumns.find(column => column.id === sourceId);
+          console.log(sourceContainer)
           destinationContainer =  prevState.statusColumns.find( column => column.id === destinationId )
           
         }
@@ -86,7 +122,7 @@ class TaskManager extends Component {
 
         // check if source and destination container are the sataskIdme
         const isSameContainer = sourceContainer.id === destinationContainer.id;
-
+        console.log(sourceIndex)
         //  remove a userId from the source "userIds" array via the sourceIndex
         sourceIds.splice(sourceIndex, 1);
 
@@ -128,6 +164,7 @@ class TaskManager extends Component {
         const priorityColumns = 
           prevState.priorityColumns.map(column => {
             if (column.id === newSourceContainer.id) {
+            
               return newSourceContainer;
             } else if (
               column.id === newDestinationContainer.id &&
@@ -138,7 +175,8 @@ class TaskManager extends Component {
               return column;
             }
           })
-
+        
+          console.log(priorityColumns)
         
         
        
@@ -153,13 +191,40 @@ class TaskManager extends Component {
   };
 
   handlePageClick = (data) => {
+   
     let currentPage = data.selected;
     this.setState({ currentPage });
   };
+  // handleGrouping  = () => {
+  //   console.log("Groupeing")
+    
+  //   this.groupItems(this.props.tasks.data, priorityColumns );
+  //   console.log("Grouped")
+  
+  
+  // };
+  
 
   render() {
+   
+   
     let { notificationList, currentPage, itemPerPage, tasks, groupBy, statusColumns, priorityColumns  } = this.state;
     
+   {!this.state.loading & !this.state.grouped &&    
+    this.groupItems(this.props.tasks.data, this.state.priorityColumns)
+    //this.groupItems(this.props.tasks.data, this.state.statusColumns)
+   
+    
+
+  }
+  // {!this.state.loading &&    
+  //   this.groupItems(this.props.tasks.data, this.state.statusColumns)
+    
+    
+
+  // }
+ 
+  
     return (
       <div>
         <Breadcrumb
@@ -254,9 +319,11 @@ class TaskManager extends Component {
               <label>
                     <span   className="col-sm-2 col-form-label me-2">Group By</span>
                     <select>
-                    <option value="15" onClick={() => {this.setState({groupBy:"status"}); console.log(this.state.groupBy)}}>Status</option>
-                    <option value="50"  onClick={() => {this.setState({groupBy:"priority"}); console.log(this.state.groupBy)}} defaultValue>Priortiy</option>
-                    
+                       
+                    <option onClick={() => {this.setState({groupBy:"status"}); }}>Status</option>
+                    <option onClick={() => {this.setState({groupBy:"priority"}); console.log(this.state.priorityColumns)}} defaultValue>Priortiy</option>
+                  
+                   
                      
                     </select>
                   </label>
@@ -283,24 +350,25 @@ class TaskManager extends Component {
             ))}
           </Legend> */}
          
-         {groupBy=="priority" && 
+         {groupBy=="priority" & this.state.loading==false && 
+       
           priorityColumns.map(({ id, title, taskIds }) => (
             <DropContainer
               id={id}
               key={id}
               title={title}
-              tasks={taskIds.map(id => tasks.find(task => task.id === id))}
+              tasks={taskIds.map(title => this.props.tasks.data.find(task => task.name === title))}
             />
           ))}
-           {groupBy=="status" && 
+           {/* {groupBy=="status" & this.state.loading==false && 
           statusColumns.map(({ id, title, taskIds }) => (
             <DropContainer
               id={id}
               key={id}
               title={title}
-              tasks={taskIds.map(id => tasks.find(task => task.id === id))}
+              tasks={taskIds.map(title => this.props.tasks.data.find(task => task.name === title))}
             />
-          ))}
+          ))} */}
         </DragDropContext>
       </Container>
               {/* {notificationList
@@ -478,371 +546,23 @@ class TaskManager extends Component {
             </div>
           </div>
 
-          <div className="col-xl-3">
-            <Accordion className="mb-3" defaultActiveKey="search">
-              <Accordion.Item eventKey="search">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Search Task
-                </Accordion.Header>
-                <Accordion.Body eventKey="search">
-                  <div id="custom-toggle">
-                    <input
-                      type="text"
-                      placeholder="type  &  hit enter"
-                      className="form-control"
-                    />
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-
-            <Accordion className="mb-3" defaultActiveKey="actions">
-              <Accordion.Item eventKey="actions">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Actions
-                </Accordion.Header>
-                <Accordion.Body eventKey="actions">
-                  <div id="custom-toggle2">
-                    <h5 className="card-title">Light card title</h5>
-                    <p className="card-text">
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
-                    </p>
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-
-            <Accordion className="mb-3" defaultActiveKey="navigation">
-              <Accordion.Item eventKey="navigation">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Navigation
-                </Accordion.Header>
-                <Accordion.Body eventKey="navigation">
-                  <div id="custom-toggle3">
-                    <p className="card-text">Actions</p>
-
-                    <div className="list-group">
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <span className="custom-font">
-                          <i className="i-Add-Window"> </i>
-                        </span>
-                        Create Task
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action "
-                      >
-                        <i className="i-Empty-Box"> </i> Create Project
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Edit"> </i> Edit Task List
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Add-User"> </i> Assign User
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action disabled"
-                      >
-                        <i className="i-Business-Mens"> </i> Create Team
-                      </Link>
-                    </div>
-                    <div className="mb-4"></div>
-
-                    <p className="card-text">Tasks</p>
-
-                    <div className="list-group">
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <span className="custom-font">
-                          <i className="i-Folders"> </i>
-                        </span>
-                        All Tasks
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action "
-                      >
-                        <i className="i-Add-File"> </i> Active Tasks
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Close-Window"> </i> Closed Tasks
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Administrator"> </i> Assigned To Me
-                        <span className="badge badge-primary badge-pill ml-4">
-                          14
-                        </span>
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Conference"> </i> Assigned To My Team
-                        <span className="badge badge-primary badge-pill ml-4">
-                          14
-                        </span>
-                      </Link>
-                      <Link
-                        to="#"
-                        className="list-group-item list-group-item-action"
-                      >
-                        <i className="i-Gears"> </i> Settings
-                      </Link>
-                    </div>
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-
-            <Accordion className="mb-3" defaultActiveKey="Assigners">
-              <Accordion.Item eventKey="Assigners">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Assigners
-                </Accordion.Header>
-                <Accordion.Body eventKey="Assigners">
-                  <div id="custom-toggle4">
-                    <ul className="media-list">
-                      <li className="media mb-2">
-                        <Link to="#" className="mr-4">
-                          <img
-                            src="../assets/images/faces/1.jpg"
-                            className="rounded-circle"
-                            width="36"
-                            alt="asd"
-                            srcSet=""
-                          />
-                        </Link>
-                        <div className="ul-task-manager__media">
-                          <Link to="#">James Alexander gull</Link>
-                          <div className="font-size-sm text-muted">
-                            Santa Ana,CA
-                          </div>
-                        </div>
-                        <div className="ml-3 align-self-center">
-                          <span className="badge bg-mark"></span>
-                        </div>
-                      </li>
-
-                      <li className="media mb-2">
-                        <Link to="#" className="mr-4">
-                          <img
-                            src="../assets/images/faces/1.jpg"
-                            className="rounded-circle"
-                            width="36"
-                            alt="asd"
-                            srcSet=""
-                          />
-                        </Link>
-                        <div className="ul-task-manager__media">
-                          <Link to="#">James Alexander</Link>
-                          <div className="font-size-sm text-muted">
-                            Santa Ana,CA
-                          </div>
-                        </div>
-                        <div className="ml-3 align-self-center">
-                          <span className="badge bg-mark "></span>
-                        </div>
-                      </li>
-
-                      <li className="media mb-2">
-                        <Link to="#" className="mr-4">
-                          <img
-                            src="../assets/images/faces/1.jpg"
-                            className="rounded-circle"
-                            width="36"
-                            alt="asd"
-                            srcSet=""
-                          />
-                        </Link>
-                        <div className="ul-task-manager__media">
-                          <Link to="#">James Alexander</Link>
-                          <div className="font-size-sm text-muted">
-                            Santa Ana,CA
-                          </div>
-                        </div>
-                        <div className="ml-3 align-self-center">
-                          <span className="badge bg-mark"></span>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-
-            <Accordion className="mb-3" defaultActiveKey="Revisions">
-              <Accordion.Item eventKey="Revisions">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Revisions
-                </Accordion.Header>
-                <Accordion.Body eventKey="Revisions">
-                  <div id="custom-toggle5">
-                    <li className="media mb-3">
-                      <Link to="#" className="revision-font mt-1">
-                        <i className="i-Arrow-Down-in-Circle mr-2 text-28"></i>
-                      </Link>
-                      <div className="ul-task-manager__media">
-                        <p className="revisions-p">
-                          Add full font overrides for popovers and tooltips
-                        </p>
-                        <div className="font-size-sm text-muted">
-                          24 minutes ago
-                        </div>
-                      </div>
-                    </li>
-
-                    <li className="media mb-3">
-                      <Link to="#" className="revision-font mt-1">
-                        <i className="i-Arrow-Down-in-Circle mr-2 text-28 align-middle"></i>
-                      </Link>
-                      <div className="ul-task-manager__media">
-                        <p className="revisions-p">
-                          Add full font overrides for popovers and tooltips
-                        </p>
-                        <div className="font-size-sm text-muted">
-                          24 minutes ago
-                        </div>
-                      </div>
-                    </li>
-
-                    <li className="media mb-3">
-                      <Link to="#" className="revision-font mt-1">
-                        <i className="i-Arrow-Down-in-Circle mr-2 text-28"></i>
-                      </Link>
-                      <div className="ul-task-manager__media">
-                        <p className="revisions-p">
-                          Chris Arney created a new Design branch
-                        </p>
-                        <div className="font-size-sm text-muted">
-                          2 hours ago
-                        </div>
-                      </div>
-                      <div className="ml-3 align-self-center">
-                        <span className="badge bg-mark"></span>
-                      </div>
-                    </li>
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-
-            <Accordion className="mb-3" defaultActiveKey="Completeness">
-              <Accordion.Item eventKey="Completeness">
-                <Accordion.Header className="w-100" eventKey="search">
-                  Completeness Stats
-                </Accordion.Header>
-                <Accordion.Body eventKey="Completeness">
-                  <div id="custom-toggle6">
-                    <ul className="list-unstyled mb-0">
-                      <li className="mb-3">
-                        <div className="d-flex align-items-center mb-1">
-                          Blockers
-                          <span className="text-muted ml-auto">50%</span>
-                        </div>
-                        <div
-                          className="progress"
-                          style={{ height: "0.125rem" }}
-                        >
-                          <div className="progress-bar bg-danger w-50">
-                            <span className="sr-only">50% Complete</span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <li className="mb-3">
-                        <div className="d-flex align-items-center mb-1">
-                          High priority
-                          <span className="text-muted ml-auto">70%</span>
-                        </div>
-                        <div
-                          className="progress"
-                          style={{ height: "0.125rem" }}
-                        >
-                          <div
-                            className="progress-bar bg-warning-400"
-                            style={{ width: "70%" }}
-                          >
-                            <span className="sr-only">70% Complete</span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <li className="mb-3">
-                        <div className="d-flex align-items-center mb-1">
-                          Normal priority
-                          <span className="text-muted ml-auto">80%</span>
-                        </div>
-                        <div
-                          className="progress"
-                          style={{ height: "0.125rem" }}
-                        >
-                          <div
-                            className="progress-bar bg-success-400"
-                            style={{ width: "80%" }}
-                          >
-                            <span className="sr-only">80% Complete</span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div className="d-flex align-items-center mb-1">
-                          Low priority
-                          <span className="text-muted ml-auto">60%</span>
-                        </div>
-                        <div
-                          className="progress"
-                          style={{ height: "0.125rem" }}
-                        >
-                          <div
-                            className="progress-bar bg-grey-400"
-                            style={{ width: "60%" }}
-                          >
-                            <span className="sr-only">60% Complete</span>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </div>
+         
         </div>
       </div>
     );
   }
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//       tasks: state.taskReducer.taskList,
+const mapStateToProps = (state) => {
+  return {
+      tasks: state.taskReducer.taskList,
     
-//   };
-// };
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//       fetchTask: ()=> dispatch(getTaskList())
-//   };
-// };
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchTask: ()=> dispatch(getTaskList())
+  };
+};
 
-export default TaskManager;
+export default connect(mapStateToProps, mapDispatchToProps)(TaskManager);

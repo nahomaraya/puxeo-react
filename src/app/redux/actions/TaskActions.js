@@ -18,8 +18,9 @@ const headers = {
 }
 
 export const  getTaskList = () => async  (dispatch) => {
+
   try{
- await axios.get(`/api/resource/Task?q=proxy&fields=["project", "type", "status", "priority","subject"]`,
+ await axios.get(`/api/resource/Task?q=proxy&fields=["name","subject", "project", "type", "status", "priority", "parent_task", "department","color", "is_group", "exp_start_date" ,"exp_end_date", "expected_time", "total_costing_amount","total_billing_amount"]`,
   {
     headers: headers
   },
@@ -28,12 +29,13 @@ export const  getTaskList = () => async  (dispatch) => {
   )
   
   .then(response =>
-    
+   
     dispatch(
     {
       type: GET_TASK_LIST,
       payload: response.data
-    }
+    },
+    
   ))
 
   
@@ -45,6 +47,7 @@ export const  getTaskList = () => async  (dispatch) => {
   //     type: GET_ABOUT_LIST,
   //     payload: data
   //   });
+
   console.log("Sucess");
 
  
@@ -79,6 +82,7 @@ export const addTask = (taskData) => dispatch => {
         console.log("error in request", err);
       });
 }
+
 
 
 

@@ -12,7 +12,10 @@ import {
   UserContainer
 } from "../index";
 
-const DropContainer = ({ id, title, tasks }) => (
+const DropContainer = ({ id, title, tasks }) => {
+   console.log(tasks)
+  return(
+    
   <Column>
     <Title style={{ marginBottom: 5 }}>
     <div className="d-flex  flex-row align-items-center">
@@ -33,11 +36,11 @@ const DropContainer = ({ id, title, tasks }) => (
     <Droppable droppableId={id}>
       {({ innerRef, placeholder }, { isDraggingOver }) => (
         <UserContainer ref={innerRef} isDraggingOver={isDraggingOver}>
-              <Accordion defaultActiveKey="search">   
-          {!isEmpty(tasks) ? (
-            tasks.map(({ id, project, subject, status }, index) => (
+              <Accordion>   
+          {!isEmpty({tasks}) ? (
+            tasks.map(({ name,  project, subject, status }, index) => (
             
-              <Draggable key={id} draggableId={id} index={index}>
+              <Draggable key={name} draggableId={name} index={index}>
                 {(
                   { draggableProps, dragHandleProps: eventHandlers, innerRef },
                   { isDragging }
@@ -55,7 +58,7 @@ const DropContainer = ({ id, title, tasks }) => (
  
                 
   
-   <span className="">{project}</span>
+   <span className="">{subject}</span>
  
   
                
@@ -132,6 +135,7 @@ const DropContainer = ({ id, title, tasks }) => (
     </Droppable>
  
   </Column>
-);
+  )
+;}
 
 export default DropContainer;

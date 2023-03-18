@@ -3,6 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@fullcalendar/bootstrap": "^5.9.0",
     "@fullcalendar/core": "^5.9.0",
     "@fullcalendar/daygrid": "^5.9.0",
@@ -66,7 +68,7 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "shortid": "^2.2.15",
-    "styled-components": "^4.0.0",
+    "styled-components": "^5.3.9",
     "sweetalert2": "^9.5.4",
     "sweetalert2-react": "^0.8.3",
     "victory": "^34.0.0",
@@ -80,6 +82,9 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "resolutions": {
+    "styled-components": "^5"
   },
   "browserslist": {
     "production": [
