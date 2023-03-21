@@ -8,9 +8,8 @@ import {
   DropContainer,
   Legend,
   ShowBadge,
-
 } from "./task-dnd/components";
-import {data} from './task-dnd/data'
+import { data } from "./data";
 import { connect } from "react-redux";
 import { getTaskList } from "app/redux/actions/TaskActions";
 import ReactPaginate from "react-paginate";
@@ -29,189 +28,145 @@ const Wrapper = styled.section`
   background: papayawhip;
 `;
 
-
-
 class TaskProject extends Component {
-    state = {
-        groupBy :"priority",
-        grouped: false,
-        loading: true,
-        ...data,
-       
-      };
+  state = { ...data };
 
-    //   componentDidMount(){
-    //     const timer = setTimeout(()=> {
-    //       this.setState({loading: false})
-    //    }, 5000);
-       
-    //    this.props.fetchTask();
-     
-    //    return () => {
-    //      clearTimeout(timer);
-        
-    //   }
-     
-    // }
+  componentDidMount() {}
 
-    onDragEnd = ({ source, destination, draggableId }) => {
-        // dropped inside of the list
-     
-        
-        if (source && destination) {
-          this.setState(prevState => {
-            let initColumns = [];
-            let sourceContainer = [{}];
-            let destinationContainer = [{}] ;
-    
-              // source container index and id
-          
-           
-          
-            // destination container index and id
-    
-            const { index: sourceIndex, droppableId: sourceId } = source;
-            const {
-              index: destinationIndex,
-              droppableId: destinationId
-            } = destination;
-           
-              // source container object
-              // desination container object
-            if(this.state.groupBy=="priority"){
-              
-                sourceContainer = prevState.priorityColumns.find(column => column.id === sourceId)
-                console.log(sourceContainer)
-                destinationContainer =  prevState. priorityColumns.find( column => column.id === destinationId )
-            }
-            else if(this.state.groupBy=="status"){
-              sourceContainer = prevState.statusColumns.find(column => column.id === sourceId);
-              console.log(sourceContainer)
-              destinationContainer =  prevState.statusColumns.find( column => column.id === destinationId )
-              
-            }
-          
-          
-           
-          
-            
-            
-    
-            // source container "userIds" array
-           
-            const sourceIds = Array.from(sourceContainer.taskIds);
-    
-            // destination container "userIds" array
-            const destinationIds = Array.from(destinationContainer.taskIds);
-    
-            // check if source and destination container are the sataskIdme
-            const isSameContainer = sourceContainer.id === destinationContainer.id;
-            console.log(sourceIndex)
-            //  remove a userId from the source "userIds" array via the sourceIndex
-            sourceIds.splice(sourceIndex, 1);
-    
-            // add a userId (draggableId) to the source or destination "userIds" array
-            if (isSameContainer) {
-              sourceIds.splice(destinationIndex, 0, draggableId);
-            } else {
-              destinationIds.splice(destinationIndex, 0, draggableId);
-            }
-    
-            // update the source container with changed sourceIds
-            const newSourceContainer = {
-              ...sourceContainer,
-              taskIds: sourceIds
-            };
-    
-            // update the destination container with changed destinationIds
-            const newDestinationContainer = {
-              ...destinationContainer,
-              taskIds: destinationIds
-            };
-    
-            // loop through current columns and update the source
-            // and destination containers
-            const statusColumns = 
-           
-            prevState.statusColumns.map(column => {
-              if (column.id === newSourceContainer.id) {
-                return newSourceContainer;
-              } else if (
-                column.id === newDestinationContainer.id &&
-                !isSameContainer
-              ) {
-                return newDestinationContainer;
-              } else {
-                return column;
-              }
-            });
-            const priorityColumns = 
-              prevState.priorityColumns.map(column => {
-                if (column.id === newSourceContainer.id) {
-                
-                  return newSourceContainer;
-                } else if (
-                  column.id === newDestinationContainer.id &&
-                  !isSameContainer
-                ) {
-                  return newDestinationContainer;
-                } else {
-                  return column;
-                }
-              })
-            
-              console.log(priorityColumns)
-            
-            
-           
-            
-            return {
-              ...prevState,
-              statusColumns,
-              priorityColumns
-            };
-          });
+  onDragEnd = ({ source, destination, draggableId }) => {
+    // dropped inside of the list
+
+    if (source && destination) {
+      this.setState((prevState) => {
+        // source container index and id
+        const { index: sourceIndex, droppableId: sourceId } = source;
+
+        // destination container index and id
+        const { index: destinationIndex, droppableId: destinationId } =
+          destination;
+
+        // source container object
+        const sourceContainer = prevState.statusColumns.find(
+          (column) => column.id === sourceId
+        );
+
+        // desination container object
+        const destinationContainer = prevState.columns.find(
+          (column) => column.id === destinationId
+        );
+
+        // source container "userIds" array
+        const sourceIds = Array.from(sourceContainer.userIds);
+
+        // destination container "userIds" array
+        const destinationIds = Array.from(destinationContainer.userIds);
+
+        // check if source and destination container are the same
+        const isSameContainer = sourceContainer.id === destinationContainer.id;
+
+        //  remove a userId from the source "userIds" array via the sourceIndex
+        sourceIds.splice(sourceIndex, 1);
+
+        // add a userId (draggableId) to the source or destination "userIds" array
+        if (isSameContainer) {
+          sourceIds.splice(destinationIndex, 0, draggableId);
+        } else {
+          destinationIds.splice(destinationIndex, 0, draggableId);
         }
-      };
 
+        // update the source container with changed sourceIds
+        const newSourceContainer = {
+          ...sourceContainer,
+          userIds: sourceIds,
+        };
 
-      render() {
+        // update the destination container with changed destinationIds
+        const newDestinationContainer = {
+          ...destinationContainer,
+          userIds: destinationIds,
+        };
 
-        return (
-            <>
-             <Accordion>
-             <Accordion.Item >
-                <Accordion.Header className="" >
-                    <div className="d-flex gap-4">
-                    <h1>Enhancment Requests</h1>
-                   
-                    <i className='text-20 mt-12 i-Information'></i>
-                    <Button
-                    key={'light'}
-                    variant={'light'}
-                    className="btn-rounded m-1 text-capitalize"
-                  >
-                    + New Task
-                  </Button>
+        // loop through current statusColumns and update the source
+        // and destination containers
+        const statusColumns = prevState.statusColumns.map((column) => {
+          if (column.id === newSourceContainer.id) {
+            return newSourceContainer;
+          } else if (
+            column.id === newDestinationContainer.id &&
+            !isSameContainer
+          ) {
+            return newDestinationContainer;
+          } else {
+            return column;
+          }
+        });
 
-                    </div>
+        return {
+          ...prevState,
+          statusColumns,
+        };
+      });
+    }
+  };
 
-                </Accordion.Header>
-                <Accordion.Body>
+  render() {
+    let { statusColumns, priorityColumns, tasks } = this.state;
 
-                </Accordion.Body>
+    return (
+      <>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header className="">
+              <div className="d-flex gap-4">
+                <h1>Enhancment Requests</h1>
 
-                </Accordion.Item>
-             </Accordion>
-            
-            
-            </>
-        )
+                <i className="text-20 mt-12 i-Information"></i>
+                <Button
+                  key={"light"}
+                  variant={"light"}
+                  className="btn-rounded m-1 text-capitalize"
+                >
+                  + New Task
+                </Button>
+              </div>
+            </Accordion.Header>
+            <Accordion.Body>
+              <div className="row">
+                <Container>
+                  <DragDropContext onDragEnd={this.onDragEnd}>
+                    {/* <Legend>
+            <Title>Legend</Title>
+            {responses.map(response => (
+              <ShowBadge
+                key={response}
+                response={response}
+                style={{ fontSize: 17 }}
+                showLast
+              >
+                {response}
+              </ShowBadge>
+            ))}
+          </Legend> */}
 
-
-      }
-
-
+                    {statusColumns.map(({ id, title, taskIds }) => (
+                      <DropContainer
+                        id={id}
+                        key={id}
+                        title={title}
+                        tasks={taskIds.map((id) =>
+                          tasks.find((task) => task.id === id)
+                        )}
+                      />
+                    ))}
+                  </DragDropContext>
+                </Container>
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      </>
+    );
+  }
 }
 
 export default TaskProject;
