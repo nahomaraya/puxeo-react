@@ -18,6 +18,7 @@ import calendarRoutes from "./views/app/calendar/calendarRoutes";
 import taskManagerRoutes from "./views/app/task-manager/taskManagerRoutes";
 import ecommerceRoutes from "./views/app/ecommerce/ecommerceRoutes";
 import contactRoutes from "./views/app/contact/contactRoutes";
+import projectRoutes from "./views/app/projects/projectRoutes";
 
 const redirectRoute = [
   {
@@ -55,6 +56,7 @@ const routes = [
       ...calendarRoutes,
       ...ecommerceRoutes,
       ...contactRoutes,
+      ...projectRoutes,
       ...redirectRoute,
       ...errorRoute
     ]

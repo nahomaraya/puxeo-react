@@ -4,8 +4,17 @@ import "./index.css";
 import "./index.scss";
 import App from "./app/App";
 import * as serviceWorker from "./serviceWorker";
+import { DataContextProvider } from "app/providers/DataContext";
+import { HoverContextProvider } from "app/providers/HoverContext";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <DataContextProvider>
+    <HoverContextProvider>
+      <App />
+    </HoverContextProvider>
+  </DataContextProvider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

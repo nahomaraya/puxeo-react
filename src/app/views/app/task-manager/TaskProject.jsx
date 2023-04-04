@@ -161,6 +161,7 @@ class TaskProject extends Component {
                   </DragDropContext>
                 </Container>
               </div>
+              
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>

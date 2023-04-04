@@ -41,7 +41,7 @@ class Layout3 extends Component {
           >
             <div className="main-content">{renderRoutes(routes)}</div>
 
-            <Footer></Footer>
+            {/* <Footer></Footer> */}
           </div>
         </div>
         <GullSearch

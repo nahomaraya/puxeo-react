@@ -54,7 +54,7 @@ class Layout1 extends Component {
             <Suspense fallback={<Loading />}>
               <div className="main-content">{renderRoutes(routes)}</div>
             </Suspense>
-            {settings.footer.show && <Footer></Footer>}
+            {/* {settings.footer.show && <Footer></Footer>} */}
           </div>
         </div>
         <GullSearch

@@ -13,6 +13,11 @@ import {
 } from "../index";
 import styled from "styled-components";
 
+const AddTask = styled.h6`
+font-size: 0.5em;
+text-align: start;
+`;
+
 const SubTaskkTitle = styled.h2`
   font-size: 1em;
   text-align: center;
@@ -23,13 +28,20 @@ const SubTaskkTitle = styled.h2`
 const TaskColumn = styled.h2`
   padding-left: 40px;
   font-size: 1em;
-  text-align: center;
+  text-align: start;
   color: palevioletred;
 `;
 
-const TaskTitle = styled.h1`
+const TaskTitle = styled.h2`
   padding-left: 40px;
-  font-size: 1.2em;
+  font-size: 1.3em;
+  text-align: start;
+  color: palevioletred;
+`;
+
+const TaskSubject = styled.h1`
+  padding-left: 40px;
+  font-size: 1.3em;
   text-align: start;
   color: palevioletred;
 `;
@@ -63,27 +75,27 @@ const DropContainer = ({ id, title, tasks }) => {
             <TaskHeader>Type</TaskHeader>
           </div> */}
           <Flexrow>
-            <Flexcolumn size={12}>
+            <Flexcolumn size={6}>
               <Flexrow>
-                <span>{title} </span> &nbsp;&nbsp;&nbsp;
-                <span>{tasks.length} Tasks</span>
+                <span ><TaskSubject>{title}</TaskSubject> </span> &nbsp;&nbsp;&nbsp;
+                <span><AddTask> {tasks.length} Tasks</AddTask></span>
                 {/* <span>{priority} </span>
                                 <span className="flex-grow-1"></span> */}
               </Flexrow>
             </Flexcolumn>
 
-            <Flexcolumn size={6}>
+            <Flexcolumn size={12}>
               <Flexrow>
-                <Flexcolumn size={3}>
+                <Flexcolumn size={4}>
                   <TaskTitle>Project</TaskTitle>
                 </Flexcolumn>
-                <Flexcolumn size={3}>
+                <Flexcolumn size={4}>
                   <TaskTitle>Status</TaskTitle>
                 </Flexcolumn>
-                <Flexcolumn size={3}>
+                <Flexcolumn size={4}>
                   <TaskTitle>Priority</TaskTitle>
                 </Flexcolumn>
-                <Flexcolumn size={3}>
+                <Flexcolumn size={4}>
                   <TaskTitle>Project</TaskTitle>
                 </Flexcolumn>
               </Flexrow>
@@ -117,24 +129,24 @@ const DropContainer = ({ id, title, tasks }) => {
                           <Accordion.Header className="">
                             <div className="d-flex  flex-row align-items-center">
                               <Flexrow>
-                                <Flexcolumn size={12}>
+                                <Flexcolumn size={6}>
                                   <TaskTitle>{priority}</TaskTitle>
                                   {/* <span>{priority} </span>
                                 <span className="flex-grow-1"></span> */}
                                 </Flexcolumn>
 
-                                <Flexcolumn size={6}>
+                                <Flexcolumn size={12}>
                                   <Flexrow>
-                                    <Flexcolumn size={2}>
+                                    <Flexcolumn size={4}>
                                       <TaskColumn>{project}</TaskColumn>
                                     </Flexcolumn>
-                                    <Flexcolumn size={2}>
+                                    <Flexcolumn size={4}>
                                       <TaskColumn>{status}</TaskColumn>
                                     </Flexcolumn>
-                                    <Flexcolumn size={2}>
+                                    <Flexcolumn size={4}>
                                       <TaskColumn>{priority}</TaskColumn>
                                     </Flexcolumn>
-                                    <Flexcolumn size={2}>
+                                    <Flexcolumn size={4}>
                                       <TaskColumn>{project}</TaskColumn>
                                     </Flexcolumn>
                                   </Flexrow>
@@ -215,6 +227,7 @@ const DropContainer = ({ id, title, tasks }) => {
             </Accordion>
           </UserContainer>
         )}
+        
       </Droppable>
     </Column>
   );
