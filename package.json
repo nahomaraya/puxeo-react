@@ -30,6 +30,7 @@
     "history": "^4.10.1",
     "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.15",
+    "material-react-table": "^1.9.3",
     "moment": "^2.24.0",
     "perfect-scrollbar": "^1.4.0",
     "rc-slider": "^8.7.1",
