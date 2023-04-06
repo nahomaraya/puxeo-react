@@ -48,10 +48,10 @@ $full-map: (
 
 @each $colorName, $map in $full-map {
   @each $name, $value in $map {
-    .#{$colorName}-#{$name} {
+    .#{unquote("$colorName")}-#{unquote("$name")} {
       background-color: $value;
     }
-    .text-#{"#{$colorName}"}-#{$name}  {
+    .text-#{unquote("$colorName")}-#{unquote("$name")}  {
         @if (lightness( $value ) > 40) {
           color: black;
         }
