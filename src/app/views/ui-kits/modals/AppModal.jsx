@@ -3,6 +3,7 @@ import { Breadcrumb } from "@gull";
 import BasicModal from "./BasicModal";
 import SimpleCard from "@gull/components/cards/SimpleCard";
 import ScrollableModal from "./ScrollableModal";
+import FormsWizard from "app/views/forms/FormsWizard";
 
 class AppModal extends Component {
   state = {};
@@ -28,6 +29,14 @@ class AppModal extends Component {
                 centered={true}
                 name="Launch centered modal"
               ></BasicModal>
+            </SimpleCard>
+          </div>
+          <div className="col-md-8">
+            <SimpleCard title="Space Wizard" className="mb-4" >
+              <BasicModal
+                centered={true}
+                name="Create a new Space?"
+              ><FormsWizard/></BasicModal>
             </SimpleCard>
           </div>
         </div>

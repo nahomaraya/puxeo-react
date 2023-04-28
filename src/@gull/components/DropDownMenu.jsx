@@ -30,6 +30,7 @@ class DropDownMenu extends Component {
               open: this.state.open,
             })}
             onClick={this.props.closeSecSidenav}
+            
           >
             <NavLink activeClassName="selected" exact to={item.path}>
               <i className={`nav-icon ${item.icon}`}></i>

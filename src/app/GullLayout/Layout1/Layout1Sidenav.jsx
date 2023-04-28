@@ -15,6 +15,8 @@ import {
 import { logoutUser } from "app/redux/actions/UserActions";
 import { withRouter } from "react-router-dom";
 import ScrollBar from "react-perfect-scrollbar";
+import BasicModal from "app/views/ui-kits/modals/BasicModal";
+import FormsWizard from "app/views/forms/FormsWizard";
 
 class Layout1Sidenav extends Component {
   windowListener = null;
@@ -143,7 +145,9 @@ class Layout1Sidenav extends Component {
     let { settings } = this.props;
 
     return (
+
       <div className="side-content-wrap">
+     
         <Srcollbar
           className={classList({
             "sidebar-left o-hidden rtl-ps-none": true,
@@ -187,14 +191,19 @@ class Layout1Sidenav extends Component {
             ))}
           </ul>
         </Srcollbar>
-
+        
         <ScrollBar
           className={classList({
             "sidebar-left-secondary o-hidden rtl-ps-none": true,
             open: settings.layout1Settings.leftSidebar.secondaryNavOpen,
           })}
         >
+             <BasicModal
+                centered={true}
+                name="Create a new Space?"
+              ><FormsWizard/></BasicModal>
           {this.state.selectedItem && this.state.selectedItem.sub && (
+        
             <DropDownMenu
               menu={this.state.selectedItem.sub}
               closeSecSidenav={this.closeSecSidenav}

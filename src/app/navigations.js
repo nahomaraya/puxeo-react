@@ -27,115 +27,89 @@ export const navigations = [
     sub: [
       {
         icon: "i-One-Window",
-        name: "Module Name",
+        name: "Space 1",
         path: "/dashboard/v1",
         type: "link",
+        
         sub: [
           {
             icon: "i-Receipt",
-            name: "Space 1",
+            name: "Folder 1",
             path: "/task-manager",
             type: "link",
-           
+            
             sub: [
               {
                 icon: "i-Receipt",
-                name: "Folder 1",
+                name: "Project 1",
                 type: "link",
-                path: "/task-manager",
-                sub: [
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 1",
-                    type: "link",
-                    path: "/projects"
-                  },
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 2",
-                    type: "link",
-                    path: "/projects"
-                  },
-
-                ]
+                path: "/projects"
               },
               {
                 icon: "i-Receipt",
-                name: "Folder 2",
+                name: "Project 2",
                 type: "link",
-                path: "/todo/list",
-                sub: [
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 1",
-                    type: "link",
-                    path: "/projects"
-                  },
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 2",
-                    type: "link",
-                    path: "/projects"
-                  },
-
-                ]
+                path: "/projects"
               },
-              
+            ]
+           
+          
+          },
+         
+          
+          
+        ]
+      },
+      {
+        icon: "i-Receipt",
+        name: "Space 2",
+        type: "link",
+        path: "/task-manager",
+        
+        sub: [
+          {
+            icon: "i-Receipt",
+            name: "Folder 1",
+            type: "link",
+            path: "/task-manager",
+            sub: [
+              {
+                icon: "i-Receipt",
+                name: "Project 1",
+                type: "link",
+                path: "/todo/list"
+              },
+              {
+                icon: "i-Receipt",
+                name: "Project 2",
+                type: "link",
+                path: "/todo/list"
+              },
+
             ]
           },
           {
             icon: "i-Receipt",
-            name: "Space 2",
+            name: "Folder 2",
             type: "link",
-            path: "/task-manager",
+            path: "/todo/list",
             sub: [
               {
                 icon: "i-Receipt",
-                name: "Folder 1",
+                name: "Project 1",
                 type: "link",
-                path: "/task-manager",
-                sub: [
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 1",
-                    type: "link",
-                    path: "/todo/list"
-                  },
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 2",
-                    type: "link",
-                    path: "/todo/list"
-                  },
-
-                ]
+                path: "/todo/list"
               },
               {
                 icon: "i-Receipt",
-                name: "Folder 2",
+                name: "Project 2",
                 type: "link",
-                path: "/todo/list",
-                sub: [
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 1",
-                    type: "link",
-                    path: "/todo/list"
-                  },
-                  {
-                    icon: "i-Receipt",
-                    name: "Project 2",
-                    type: "link",
-                    path: "/todo/list"
-                  },
-
-                ]
+                path: "/todo/list"
               },
-             
-              
+
             ]
           },
-          
+         
           
         ]
       },

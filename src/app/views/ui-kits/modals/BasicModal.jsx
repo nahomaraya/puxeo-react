@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const BasicModal = ({ name, ...props }) => {
+const BasicModal = ({ name, children, ...props }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -9,21 +9,16 @@ const BasicModal = ({ name, ...props }) => {
   };
 
   return (
-    <Fragment>
+    <Fragment style={{ maxWidth: "800px" }}>
       <Button className="text-capitalize" onClick={() => setShow(true)}>
         {name || "Launch demo modal"}
       </Button>
-      <Modal show={show} onHide={handleClose} {...props}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+      <Modal show={show} onHide={handleClose} {...props}   >
+        <Modal.Header closeButton >
+          <Modal.Title>{name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-          commodi aspernatur enim, consectetur. Cumque deleniti temporibus ipsam
-          atque a dolores quisquam quisquam adipisci possimus laboriosam.
-          Quibusdam facilis doloribus debitis! Sit quasi quod accusamus eos
-          quod. Ab quos consequuntur eaque quo rem! Mollitia reiciendis porro
-          quo magni incidunt dolore amet atque facilis ipsum deleniti rem!
+        {children}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

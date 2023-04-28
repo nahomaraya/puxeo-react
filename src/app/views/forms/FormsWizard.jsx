@@ -3,18 +3,45 @@ import { Breadcrumb } from "@gull";
 import StepWizard from "react-step-wizard";
 import FormWizardNav from "./FormWizardNav";
 import { Button } from "react-bootstrap";
+import FormBasic from "./FormBasic";
+import { SpaceForm, ColorSelector, StatusAdder, Summary } from "./SpaceForm";
 
 class FormsWizard extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "",
+      color: "#000000",
+      statuses: [],
+    };
+
+    this.setName = this.setName.bind(this);
+    this.setColor = this.setColor.bind(this);
+    this.setStatuses = this.setStatuses.bind(this);
+  }
+
+  setName(name) {
+    this.setState({ name });
+  }
+
+  setColor(color) {
+    this.setState({ color });
+  }
+
+  setStatuses(statuses) {
+    this.setState({ statuses });
+  }
+
   render() {
     return (
       <div>
-        <Breadcrumb
+        {/* <Breadcrumb
           routeSegments={[
             { name: "Forms", path: "/forms" },
             { name: "Forms Wizard" }
           ]}
-        ></Breadcrumb>
+        ></Breadcrumb> */}
         <div className="row">
           <div className="col-md-12">
             <StepWizard
@@ -23,10 +50,29 @@ class FormsWizard extends Component {
               isHashEnabled={true}
             >
               {/* this is just for example, add your own component here */}
-              <FirstComponent hashkey={"first"}></FirstComponent>
-              <FirstComponent hashkey={"second"}></FirstComponent>
-              <FirstComponent hashkey={"third"}></FirstComponent>
-              <FirstComponent hashkey={"fourth"}></FirstComponent>
+              
+              <FirstComponent hashkey={"first"}>
+            <SpaceForm name={this.state.name} setName={this.setName} />
+          </FirstComponent>
+          <FirstComponent hashkey={"second"}>
+            <ColorSelector
+              color={this.state.color}
+              setColor={this.setColor}
+            />
+          </FirstComponent>
+          <FirstComponent hashkey={"third"}>
+            <StatusAdder
+              statuses={this.state.statuses}
+              setStatuses={this.setStatuses}
+            />
+          </FirstComponent>
+          <FirstComponent hashkey={"fourth"}>
+            <Summary
+              name={this.state.name}
+              color={this.state.color}
+              statuses={this.state.statuses}
+            />
+          </FirstComponent>
             </StepWizard>
           </div>
         </div>
@@ -51,53 +97,9 @@ class FirstComponent extends Component {
 
     return (
       <div>
-        <div>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of
-          the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen
-          book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum. Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book. It has survived
-          not only five centuries, but also the leap into electronic
-          typesetting, remaining essentially unchanged. It was popularised in
-          the 1960s with the release of Letraset sheets containing Lorem Ipsum
-          passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is
-          simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book. It has survived not only five centuries,
-          but also the leap into electronic typesetting, remaining essentially
-          unchanged. It was popularised in the 1960s with the release of
-          Letraset sheets containing Lorem Ipsum passages, and more recently
-          with desktop publishing software like Aldus PageMaker including
-          versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the
-          printing and typesetting industry. Lorem Ipsum has been the industry's
-          standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book. It has
-          survived not only five centuries, but also the leap into electronic
-          typesetting, remaining essentially unchanged. It was popularised in
-          the 1960s with the release of Letraset sheets containing Lorem Ipsum
-          passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is
-          simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the
-        </div>
+     
+        {this.props.children}
+       
         <div className="d-flex justify-content-end">
           <Button className="mx-2" variant="danger" onClick={firstStep}>
             Cancel

@@ -24,7 +24,7 @@ const FormWizardNav = props => {
         >
           Step {i}
         </h5>
-        <small>This is step description</small>
+        
       </div>
     );
   }

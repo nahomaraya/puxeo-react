@@ -35,7 +35,7 @@ class DropDownMenuItem extends Component {
   render() {
     let { collapsed } = this.state;
     let { children } = this.props;
-    let { name, icon } = this.props.item;
+    let { name, icon,color } = this.props.item;
 
     return (
       <li
@@ -44,7 +44,7 @@ class DropDownMenuItem extends Component {
           open: !collapsed
         })}
       >
-        <div onClick={this.onItemClick}>
+        <div onClick={this.onItemClick}   style={{ backgroundColor: color }}>
           <i className={`nav-icon ${icon}`}></i>
           <span className="item-name">{name}</span>
           <i className="dd-arrow i-Arrow-Down"></i>

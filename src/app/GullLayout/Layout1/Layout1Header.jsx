@@ -142,7 +142,7 @@ class Layout1Header extends Component {
         <div className="d-none d-lg-flex align-items-center">
           <Dropdown className="me-3">
             <Dropdown.Toggle as="div" className="toggle-hidden cursor-pointer">
-              Mega Menu
+              Mega Menu Y
             </Dropdown.Toggle>
 
             <div className="mega-menu">
