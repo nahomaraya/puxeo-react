@@ -1,24 +1,24 @@
 export const navigations = [
-  {
-    name: "Dashboard",
-    description: "Lorem ipsum dolor sit.",
-    type: "dropDown",
-    icon: "i-Bar-Chart",
-    sub: [
-      {
-        icon: "i-Clock-3",
-        name: "Version 1",
-        path: "/dashboard/v1",
-        type: "link"
-      },
-      {
-        icon: "i-Clock-4",
-        name: "Version 2",
-        path: "/dashboard/v2",
-        type: "link"
-      }
-    ]
-  },
+  // {
+  //   name: "Dashboard",
+  //   description: "Lorem ipsum dolor sit.",
+  //   type: "dropDown",
+  //   icon: "i-Bar-Chart",
+  //   sub: [
+  //     {
+  //       icon: "i-Clock-3",
+  //       name: "Version 1",
+  //       path: "/dashboard/v1",
+  //       type: "link"
+  //     },
+  //     {
+  //       icon: "i-Clock-4",
+  //       name: "Version 2",
+  //       path: "/dashboard/v2",
+  //       type: "link"
+  //     }
+  //   ]
+  // },
   {
     name: "ERP",
     description: "Lorem ipsum dolor sit.",
@@ -30,6 +30,7 @@ export const navigations = [
         name: "Space 1",
         path: "/dashboard/v1",
         type: "link",
+        child: "Folder",
         
         sub: [
           {
@@ -37,19 +38,19 @@ export const navigations = [
             name: "Folder 1",
             path: "/task-manager",
             type: "link",
-            
+            child: "Project",
             sub: [
               {
                 icon: "i-Receipt",
                 name: "Project 1",
                 type: "link",
-                path: "/projects"
+                path: "/projects/Project1"
               },
               {
                 icon: "i-Receipt",
                 name: "Project 2",
                 type: "link",
-                path: "/projects"
+                path: "/projects/Project2"
               },
             ]
            
@@ -65,6 +66,7 @@ export const navigations = [
         name: "Space 2",
         type: "link",
         path: "/task-manager",
+        child: "Folder",
         
         sub: [
           {
@@ -72,6 +74,7 @@ export const navigations = [
             name: "Folder 1",
             type: "link",
             path: "/task-manager",
+            child: "Project",
             sub: [
               {
                 icon: "i-Receipt",
@@ -93,6 +96,7 @@ export const navigations = [
             name: "Folder 2",
             type: "link",
             path: "/todo/list",
+            child: "Project",
             sub: [
               {
                 icon: "i-Receipt",
@@ -113,12 +117,7 @@ export const navigations = [
           
         ]
       },
-      {
-        icon: "i-Clock-4",
-        name: "Version 2",
-        path: "/dashboard/v2",
-        type: "link"
-      }
+      
     ]
   },
   // {

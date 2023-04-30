@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-export const SpaceForm = () => {
+export const SpaceForm = (props) => {
   return (
     <div className="">
       <div className="">
-        <h4  style={{ fontWeight: "bold" }}>Enter a name for your space</h4>
+        <h4  style={{ fontWeight: "bold" }}>Enter a name for your {props.child}</h4>
       
         <div className="card mb-5">
           <div className="card-body">
@@ -13,7 +13,7 @@ export const SpaceForm = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Enter your spacename"
+                  placeholder="Name Here"
                 />
               </div>
             </div>

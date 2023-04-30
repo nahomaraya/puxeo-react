@@ -54,7 +54,7 @@ class FormsWizard extends Component {
 
               <FirstComponent hashkey={"first"}>
               <div >
-                <SpaceForm name={this.state.name} setName={this.setName} />
+                <SpaceForm name={this.state.name} setName={this.setName} child={this.props.child} />
                 </div>
               </FirstComponent>
               <FirstComponent hashkey={"second"}>

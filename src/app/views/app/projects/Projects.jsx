@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +19,7 @@ import Table2 from "./Table";
 
 
 const Projects = () => {
+  const { name } = useParams();
 
  const priority = ["Urgent", "High", "Medium", "Low"];
  const status = ["Open", "Completed", "Overdue"]
@@ -185,7 +187,7 @@ const Projects = () => {
     >
       <div style={{  display: "flex", justifyContent: "space-between"  }} >
       <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "1.5rem"}} >
-        <h3 className="text-black text-4xl">Project Title</h3>
+        <h3 className="text-black text-4xl">{name}</h3>
         <Button
           onClick={handleAddRow}
           variant="contained"

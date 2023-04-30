@@ -12,11 +12,17 @@ const BasicModal = ({ name, children, ...props }) => {
 
   return (
     <Fragment style={{ maxWidth: "800px" }}>
-      <Button className="text-capitalize" onClick={() => setShowModal(true)}>
+      
+      <Button
+        className={`text-capitalize ${
+          name === "Create a new Space?" ? "btn-primary": name === "Create a new Folder"? "btn-secondary": "btn-warning"
+        }`}
+        onClick={() => setShowModal(true)}
+      >
         {name || "Launch demo modal"}
       </Button>
       <Modal show={showModal} onHide={handleClose} {...props}>
-        <Modal.Header closeButton  style={{ background: "#800080" }}>
+        <Modal.Header closeButton style={{ background: "#800080" }}>
           <Modal.Title style={{ color: "white" }}>{name}</Modal.Title>
         </Modal.Header>
         <Modal.Body

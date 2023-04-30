@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { classList } from "@utils";
+import BasicModal from "app/views/ui-kits/modals/BasicModal";
+import FormsWizard from "app/views/forms/FormsWizard";
+import { ModalContext, ModalProvider } from "app/providers/ModalContext";
 
 class DropDownMenuItem extends Component {
   state = {
@@ -33,12 +36,15 @@ class DropDownMenuItem extends Component {
   };
 
   render() {
+  
     let { collapsed } = this.state;
     let { children } = this.props;
-    let { name, icon,color } = this.props.item;
+    let { name, icon,color, child } = this.props.item;
+
 
     return (
       <li
+        style={{padding: "5px"}}
         className={classList({
           "nav-item dropdown-sidemenu": true,
           open: !collapsed
@@ -60,7 +66,17 @@ class DropDownMenuItem extends Component {
           }
         >
           {children}
+        
+          <div style={{marginLeft: "20px"}}>
+          <ModalProvider>
+             <BasicModal
+                centered={true}
+                name={`Create a new ${child}`}
+              ><FormsWizard child={child} /></BasicModal>
+              </ModalProvider>
+              </div>
         </ul>
+       
       </li>
     );
   }
