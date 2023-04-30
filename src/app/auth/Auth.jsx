@@ -5,6 +5,7 @@ import { setUserData } from "../redux/actions/UserActions";
 import jwtAuthService from "../services/jwtAuthService";
 import localStorageService from "../services/localStorageService";
 import firebaseAuthService from "../services/firebase/firebaseAuthService";
+import { erpNextAuthService } from "app/services/erpnext/erpnextAuthService";
 
 class Auth extends Component {
   state = {};
@@ -13,7 +14,8 @@ class Auth extends Component {
     super(props);
 
     this.props.setUserData(localStorageService.getItem("auth_user"));
-    this.checkJwtAuth();
+   
+    this.checkErpNextAuth()
     // this.checkFirebaseAuth();
   }
 
@@ -33,6 +35,42 @@ class Auth extends Component {
         console.log("not logged in");
       }
     });
+  };
+
+  checkErpNextAuth = () => {
+    const authUser = localStorageService.getItem("auth_user");
+
+    if (authUser) {
+      // User is already authenticated, set user data from local storage
+      this.props.setUserData(authUser);
+    } else {
+      // User is not authenticated, try to log in with credentials
+      const username = "your-username";
+      const password = "your-password";
+
+      erpNextAuthService.login(username, password)
+        .then(response => {
+          // Authentication successful, retrieve user data and set state
+          const userId = response.data.full_name;
+          erpNextAuthService.getUserData(userId)
+            .then(response => {
+              const user = {
+                id: userId,
+                name: response.data.full_name,
+                email: response.data.email,
+                // Add any other user data you need here
+              };
+              this.props.setUserData(user);
+              localStorageService.setItem("auth_user", user);
+            })
+            .catch(error => {
+              // Handle error retrieving user data
+            });
+        })
+        .catch(error => {
+          // Handle authentication error
+        });
+    }
   };
 
   render() {

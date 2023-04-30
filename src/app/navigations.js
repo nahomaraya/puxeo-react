@@ -34,7 +34,7 @@ export const navigations = [
         
         sub: [
           {
-            icon: "i-Receipt",
+            icon: "i-Folder",
             name: "Folder 1",
             path: "/task-manager",
             type: "link",
@@ -62,7 +62,7 @@ export const navigations = [
         ]
       },
       {
-        icon: "i-Receipt",
+        icon: "i-One-Window",
         name: "Space 2",
         type: "link",
         path: "/task-manager",
@@ -70,7 +70,7 @@ export const navigations = [
         
         sub: [
           {
-            icon: "i-Receipt",
+            icon: "i-Folder",
             name: "Folder 1",
             type: "link",
             path: "/task-manager",
@@ -92,7 +92,7 @@ export const navigations = [
             ]
           },
           {
-            icon: "i-Receipt",
+            icon: "i-Folder",
             name: "Folder 2",
             type: "link",
             path: "/todo/list",

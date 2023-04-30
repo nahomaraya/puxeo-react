@@ -1,5 +1,6 @@
 import jwtAuthService from "../../services/jwtAuthService";
 import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
+import { erpNextAuthService } from "app/services/erpnext/erpnextAuthService";
 import { loginUser } from "app/services/erpnext/erpnextAuthService";
 import { setUserData } from "./UserActions";
 import history from "@history.js";
@@ -46,32 +47,24 @@ export function resetPassword({ email }) {
   };
 }
 
-export function erpnextLoginEmailPassword({ email, password}) {
- 
+export function erpnextLoginEmailPassword({ email, password }) {
   return dispatch => {
-    loginUser(email, password)
-    .then((response) => {
-      if (response.ok) {
-      
-       
-        console.log("sucess");
-        history.push({
-          pathname: "/"
-        });
+    erpNextAuthService.login(email, password)
+      .then(response => {
+        console.log(response)
+        if (response.status==200) {
+          console.log("success");
+          history.push({ pathname: "/" });
+          return dispatch({ type: LOGIN_SUCCESS });
+        }
+        throw new Error('Something went wrong');
+      })
+      .catch(error => {
         return dispatch({
-          type: LOGIN_SUCCESS
+          type: LOGIN_ERROR,
+          payload: error
         });
-      }
-      throw new Error('Something went wrong');
-    })
-    
-    .catch(error => {
-      
-      return dispatch({
-        type: LOGIN_ERROR,
-        payload: error
       });
-    });
   }
 }
 

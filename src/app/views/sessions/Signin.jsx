@@ -34,6 +34,7 @@ class Signin extends Component {
   handleSubmit = (value, { isSubmitting }) => {
     // this.props.loginWithEmailAndPassword(value);
     this.props.erpnextLoginEmailPassword( this.state, this.state.password);
+    console.log("Logging in")
     
   };
 
