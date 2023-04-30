@@ -12,7 +12,7 @@
 
 @mixin badge-colors() {
   @each $color, $value in $theme-colors {
-    .badge-#{$color} {
+    .badge-#{"" + $color} {
       @include badge-variant($value);
     }
   }

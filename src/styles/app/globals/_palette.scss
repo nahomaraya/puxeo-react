@@ -24,7 +24,7 @@
             background: $color;
         }
     }
-    .#{$color_name} {
+    .#{"" + $color_name} {
         background: $color;
     }
 }

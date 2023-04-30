@@ -61,13 +61,13 @@ fieldset:disabled a.btn {
 //
 
 @each $color, $value in $theme-colors {
-  .btn-#{$color} {
+  .btn-#{"" + $color} {
     @include button-variant($value, $value);
   }
 }
 
 @each $color, $value in $theme-colors {
-  .btn-outline-#{$color} {
+  .btn-outline-#{"" + $color} {
     @include button-outline-variant($value);
   }
 }
