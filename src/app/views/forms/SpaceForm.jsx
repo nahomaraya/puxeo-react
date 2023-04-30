@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 export const SpaceForm = () => {
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <h4>Create New Space</h4>
-        <p>Enter a name for your space.</p>
+    <div className="">
+      <div className="">
+        <h4  style={{ fontWeight: "bold" }}>Enter a name for your space</h4>
+      
         <div className="card mb-5">
           <div className="card-body">
             <div className="d-flex flex-column">
@@ -28,9 +28,9 @@ export const ColorSelector = (props) => {
   const [color, setColor] = useState("#000000");
 
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <h4>Select a Color</h4>
+    <div className="">
+      <div className="">
+        <h4  style={{ fontWeight: "bold" }}>Select a Color</h4>
         <p>Click on a color to select it.</p>
         <div className="card mb-5">
           <div className="card-body d-flex flex-column align-items-center">
@@ -87,9 +87,9 @@ export const StatusAdder = (props) => {
   }
 
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <h4>Add Status</h4>
+    <div className="">
+      <div className="">
+        <h4  style={{ fontWeight: "bold" }}>Add Status</h4>
         <div className="card mb-5">
           <div className="card-body">
             <div className="form-group mb-3">
@@ -120,7 +120,7 @@ export const StatusAdder = (props) => {
         {props.statuses.length > 0 && (
           <div className="card mb-5">
             <div className="card-body">
-              <h4>Select Status</h4>
+              <h4  style={{ fontWeight: "bold" }}>Select Status</h4>
               <p>Click on a status to select it.</p>
               <div className="status-options">
                 {props.statuses.map((status, index) => (
@@ -160,26 +160,35 @@ export const StatusAdder = (props) => {
 };
 export const Summary = (props) => {
   return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 3fr", rowGap: "0.5rem" }}>
+    <div style={{ fontWeight: "bold" }}>Name:</div>
+    <div>{props.name}</div>
+    <div style={{ fontWeight: "bold" }}>Color:</div>
     <div>
-      <h4>Summary</h4>
-      <div>Name: {props.name}</div>
-      <div>
-        Color:{" "}
-        <span style={{ backgroundColor: props.color, padding: "0.2rem", color: "white" }}>
-          {props.color}
-        </span>
-      </div>
-      <div>Created Statuses:</div>
-      <ul>
+      <span style={{ backgroundColor: props.color, padding: "0.2rem", color: "white" }}>
+        {props.color}
+      </span>
+    </div>
+    <div style={{ fontWeight: "bold" }}>Created Statuses:</div>
+    <div>
+      <ul style={{ margin: 0 }}>
         {props.statuses.map((status) => (
           <li
             key={status.name}
-            style={{ backgroundColor: status.color, padding: "0.2rem", borderRadius: "10px", width: "40%", color:"white" }}
+            style={{
+              backgroundColor: status.color,
+              padding: "0.2rem",
+              borderRadius: "10px",
+              width: "40%",
+              color: "white",
+              marginBottom: "0.5rem",
+            }}
           >
             {status.name}
           </li>
         ))}
       </ul>
     </div>
+  </div>
   );
 };

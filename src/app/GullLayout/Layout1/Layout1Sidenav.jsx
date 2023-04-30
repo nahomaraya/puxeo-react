@@ -17,6 +17,7 @@ import { withRouter } from "react-router-dom";
 import ScrollBar from "react-perfect-scrollbar";
 import BasicModal from "app/views/ui-kits/modals/BasicModal";
 import FormsWizard from "app/views/forms/FormsWizard";
+import { ModalContext, ModalProvider } from "app/providers/ModalContext";
 
 class Layout1Sidenav extends Component {
   windowListener = null;
@@ -198,10 +199,12 @@ class Layout1Sidenav extends Component {
             open: settings.layout1Settings.leftSidebar.secondaryNavOpen,
           })}
         >
+          <ModalProvider>
              <BasicModal
                 centered={true}
                 name="Create a new Space?"
-              ><FormsWizard/></BasicModal>
+              ><FormsWizard  /></BasicModal>
+              </ModalProvider>
           {this.state.selectedItem && this.state.selectedItem.sub && (
         
             <DropDownMenu

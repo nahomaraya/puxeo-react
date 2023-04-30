@@ -140,7 +140,7 @@ class Layout2Header extends Component {
         <div className="d-none d-lg-flex align-items-center">
           <Dropdown className="mr-3">
             <Dropdown.Toggle variant="link" id="dropdown-basic">
-              Mega Menu X
+              Mega Menu 
             </Dropdown.Toggle>
 
             <div className="mega-menu">

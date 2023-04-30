@@ -5,6 +5,7 @@ import FormWizardNav from "./FormWizardNav";
 import { Button } from "react-bootstrap";
 import FormBasic from "./FormBasic";
 import { SpaceForm, ColorSelector, StatusAdder, Summary } from "./SpaceForm";
+import { ModalContext } from "app/providers/ModalContext";
 
 class FormsWizard extends Component {
   constructor(props) {
@@ -50,29 +51,37 @@ class FormsWizard extends Component {
               isHashEnabled={true}
             >
               {/* this is just for example, add your own component here */}
-              
+
               <FirstComponent hashkey={"first"}>
-            <SpaceForm name={this.state.name} setName={this.setName} />
-          </FirstComponent>
-          <FirstComponent hashkey={"second"}>
-            <ColorSelector
-              color={this.state.color}
-              setColor={this.setColor}
-            />
-          </FirstComponent>
-          <FirstComponent hashkey={"third"}>
-            <StatusAdder
-              statuses={this.state.statuses}
-              setStatuses={this.setStatuses}
-            />
-          </FirstComponent>
-          <FirstComponent hashkey={"fourth"}>
-            <Summary
-              name={this.state.name}
-              color={this.state.color}
-              statuses={this.state.statuses}
-            />
-          </FirstComponent>
+              <div >
+                <SpaceForm name={this.state.name} setName={this.setName} />
+                </div>
+              </FirstComponent>
+              <FirstComponent hashkey={"second"}>
+              <div>
+                <ColorSelector
+                  color={this.state.color}
+                  setColor={this.setColor}
+                />
+              </div>
+              </FirstComponent>
+              <FirstComponent hashkey={"third"}>
+              <div >
+                <StatusAdder
+                  statuses={this.state.statuses}
+                  setStatuses={this.setStatuses}
+                />
+                </div> 
+              </FirstComponent>
+              <FirstComponent hashkey={"fourth"}>
+              <div >
+                <Summary
+                  name={this.state.name}
+                  color={this.state.color}
+                  statuses={this.state.statuses}
+                />
+              </div>
+              </FirstComponent>
             </StepWizard>
           </div>
         </div>
@@ -84,24 +93,33 @@ class FormsWizard extends Component {
 export default FormsWizard;
 
 class FirstComponent extends Component {
+  static contextType = ModalContext;
   state = {};
+  handleCancel = () => {
+    this.props.firstStep();
+    this.props.onCancel();
+  };
   render() {
+    const { showModal, setShowModal } = this.context;
     let {
       nextStep,
       previousStep,
       lastStep,
       firstStep,
       currentStep,
-      totalSteps
+      totalSteps,
     } = this.props;
 
     return (
       <div>
-     
         {this.props.children}
-       
+
         <div className="d-flex justify-content-end">
-          <Button className="mx-2" variant="danger" onClick={firstStep}>
+          <Button
+            className="mx-2"
+            variant="danger"
+            onClick={() => setShowModal(false)}
+          >
             Cancel
           </Button>
           <Button
