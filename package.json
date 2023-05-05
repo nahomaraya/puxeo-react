@@ -2,6 +2,7 @@
   "name": "gull-react",
   "version": "2.0.0",
   "private": true,
+  "proxy": "https://erp.puxeo.com",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",

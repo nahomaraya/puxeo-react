@@ -14,6 +14,8 @@ export const SpaceForm = (props) => {
                   type="text"
                   className="form-control"
                   placeholder="Name Here"
+                  value={props.name}
+                  onChange={(e) => props.setName(e.target.value)}
                 />
               </div>
             </div>

@@ -7,7 +7,9 @@ import FormBasic from "./FormBasic";
 import { SpaceForm, ColorSelector, StatusAdder, Summary } from "./SpaceForm";
 import { ModalContext } from "app/providers/ModalContext";
 
+
 class FormsWizard extends Component {
+  
   constructor(props) {
     super(props);
 
@@ -15,14 +17,17 @@ class FormsWizard extends Component {
       name: "",
       color: "#000000",
       statuses: [],
+     
     };
 
     this.setName = this.setName.bind(this);
     this.setColor = this.setColor.bind(this);
     this.setStatuses = this.setStatuses.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   setName(name) {
+    console.log(name)
     this.setState({ name });
   }
 
@@ -33,8 +38,44 @@ class FormsWizard extends Component {
   setStatuses(statuses) {
     this.setState({ statuses });
   }
+  handleSubmit() {
+    console.log("Submitted")
+    console.log(this.state.name)
+    console.log(this.state.color)
+   
+   
+
+    // Make a POST request to the API endpoint with the form data
+    fetch("/api/resource/Spaces", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    },
+      body: JSON.stringify({
+        name1: this.state.name,
+        color: this.state.color,
+       // statuses: statuses,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        // Reset the form state after submission
+        this.setState({
+          name: "",
+          color: "#000000",
+          statuses: [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   render() {
+    
+    
     return (
       <div>
         {/* <Breadcrumb
@@ -73,7 +114,7 @@ class FormsWizard extends Component {
                 />
                 </div> 
               </FirstComponent>
-              <FirstComponent hashkey={"fourth"}>
+              <FirstComponent hashkey={"fourth"} handleSubmit={this.handleSubmit}>
               <div >
                 <Summary
                   name={this.state.name}
@@ -142,7 +183,10 @@ class FirstComponent extends Component {
             disabled={false}
             className="mx-1"
             variant="primary"
-            onClick={lastStep}
+            onClick={() => {
+              lastStep();
+              this.props.handleSubmit(); // call the handleSubmit function
+            }}
           >
             Finish
           </Button>

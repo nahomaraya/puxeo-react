@@ -4,18 +4,28 @@ import { connect } from "react-redux";
 import AppContext from "app/appContext";
 import GullLayout from "app/GullLayout/GullLayout";
 import { flatMap } from "lodash";
+import { erpNextAuthService } from "app/services/erpnext/erpnextAuthService";
 class AuthGuard extends Component {
   constructor(props, context) {
     super(props);
     let { routes } = context;
 
     this.state = {
-      authenticated: true,
+      authenticated: false,
       routes
     };
   }
 
   componentDidMount() {
+    // erpNextAuthService.checkAuthStatus(user => {
+    //   if (user) {
+    //     this.setState({ authenticated: true });
+        
+    //   } else {
+    //     this.redirectRoute(this.props);
+    //   }
+    // });
+
     this.setState({
       routes: flatMap(this.state.routes, item => {
         if (item.routes) {
@@ -24,10 +34,6 @@ class AuthGuard extends Component {
         return [item];
       })
     });
-
-    if (!this.state.authenticated) {
-      this.redirectRoute(this.props);
-    }
   }
 
   componentDidUpdate() {

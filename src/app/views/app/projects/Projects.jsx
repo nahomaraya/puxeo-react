@@ -4,7 +4,7 @@ import MaterialReactTable from "material-react-table";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import { Box, Button,  Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import {
   Dialog,
   DialogTitle,
@@ -12,17 +12,42 @@ import {
   TextField,
   DialogActions,
   Grid,
+  makeStyles,
+  InputLabel,
+  Divider,
 } from "@material-ui/core";
 import { data } from "./data";
 import { DataContext } from "app/providers/DataContext";
 import Table2 from "./Table";
 
+const useStyles = makeStyles({
+  dialog: {
+    borderRadius: "10px",
+    boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
+  },
+  header: {
+    backgroundColor: "#663399",
+    color: "#f4f4f4",
+  },
+  button: {
+    backgroundColor: "#2196F3",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#0d8bf2",
+    },
+  },
+});
 
 const Projects = () => {
+  const classes = useStyles();
+  const handleSave = () => {
+    // Handle save logic here
+    handleClose();
+  };
   const { name } = useParams();
 
- const priority = ["Urgent", "High", "Medium", "Low"];
- const status = ["Open", "Completed", "Overdue"]
+  const priority = ["Urgent", "High", "Medium", "Low"];
+  const status = ["Open", "Completed", "Overdue"];
 
   const columns = useMemo(
     //column definitions...
@@ -93,9 +118,9 @@ const Projects = () => {
     //end
   );
 
-  const { data, setData} = React.useContext(DataContext);
+  const { data, setData } = React.useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [ group, setGroup] = useState('priority')
+  const [group, setGroup] = useState("priority");
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,7 +129,6 @@ const Projects = () => {
   const handleUnclick = () => {
     setAnchorEl(null);
   };
-
 
   // useEffect(() => {
   //   // your code to fetch data from the server
@@ -123,8 +147,6 @@ const Projects = () => {
   //   setData(filteredData);
   // }
 
-
-  
   const [draggingRow, setDraggingRow] = useState(null);
   const [hoveredTable, setHoveredTable] = useState(null);
 
@@ -160,12 +182,12 @@ const Projects = () => {
   };
 
   const handleUpdate = (task, value, groupBy) => {
-    const updatedData = data.map(item => {
+    const updatedData = data.map((item) => {
       if (item.name === task.name) {
         // update the property you want to modify
         return {
           ...item,
-          [groupBy]: value
+          [groupBy]: value,
         };
       }
       return item; // return the unchanged item for all other cases
@@ -179,80 +201,141 @@ const Projects = () => {
         display: "flex",
         flexDirection: "column",
         gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
-        background: "#eabfff",
+        background: "whitesmoke",
         gap: "1rem",
         overflow: "auto",
         p: "20px",
       }}
     >
-      <div style={{  display: "flex", justifyContent: "space-between"  }} >
-      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "1.5rem"}} >
-        <h3 className="text-black text-4xl">{name}</h3>
-        <Button
-          onClick={handleAddRow}
-          variant="contained"
-          endIcon={<AddIcon />}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            gap: "1.5rem",
+          }}
         >
-          New Task
-        </Button>
-      
+          <h3 className="text-black text-4xl">{name}</h3>
+          <Button
+            onClick={handleAddRow}
+            variant="contained"
+            endIcon={<AddIcon />}
+          >
+            New Task
+          </Button>
+        </div>
+        <div>
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            variant="contained"
+            color="success"
+            onClick={handleClick}
+          >
+            Group By
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleUnclick}
+          >
+            <MenuItem
+              onClick={() => {
+                handleUnclick();
+                setGroup("priority");
+              }}
+            >
+              Priority
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleUnclick();
+                setGroup("status");
+              }}
+            >
+              Status
+            </MenuItem>
+          </Menu>
+        </div>
       </div>
-      <div>
-      <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" color="success" onClick={handleClick}>
-        Group By
-      </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleUnclick}
+
+      {group == "priority" &&
+        priority.map((priorityItem, key) => (
+          <Table2
+            groupBy={group}
+            value={priorityItem}
+            handleUpdate={handleUpdate}
+          />
+        ))}
+      {group == "status" &&
+        status.map((priorityItem, key) => (
+          <Table2
+            groupBy={group}
+            value={priorityItem}
+            handleUpdate={handleUpdate}
+          />
+        ))}
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        classes={{ paper: classes.dialog }}
       >
-        <MenuItem onClick={() => {handleUnclick(); setGroup('priority')}}>Priority</MenuItem>
-        <MenuItem onClick={() => {handleUnclick(); setGroup('status')}}>Status</MenuItem>
-       
-      </Menu>
-    </div>
-    </div>
+        <DialogTitle className={classes.header}>New Task</DialogTitle>
 
-
-{
-  group=="priority" &&
-  priority.map((priorityItem, key) =>
-  (
-    <Table2 groupBy={group} value={priorityItem} handleUpdate={handleUpdate}/>
-  ))
-
-  }{
-    group=="status" &&
-  status.map((priorityItem, key) =>
-  (
-    <Table2 groupBy={group} value={priorityItem} handleUpdate={handleUpdate}/>
-  ))
-}
-
-    
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Task</DialogTitle>
         <DialogContent>
           <form>
-            <Grid container direction="column" spacing={3}>
-              {columns.map((columnItem, index) => (
-                <Grid item>
-                  <TextField
-                    id={columnItem.accessorKey}
-                    label={columnItem.header}
-                    variant="outlined"
-                  />
-                </Grid>
-              ))}
-             
+            <Grid container direction="row" spacing={3}>
+              <Grid item xs={6}>
+                {columns
+                  .slice(0, Math.ceil(columns.length / 2))
+                  .map((columnItem, index) => (
+                    <>
+                      <InputLabel htmlFor={columnItem.accessorKey}>
+                        {columnItem.header}
+                      </InputLabel>
+                      <Divider />
+                      <TextField
+                        key={index}
+                        id={columnItem.accessorKey}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                      />
+                    </>
+                  ))}
+              </Grid>
+              <Grid item xs={6}>
+                {columns
+                  .slice(Math.ceil(columns.length / 2))
+                  .map((columnItem, index) => (
+                    <>
+                      <InputLabel htmlFor={columnItem.accessorKey}>
+                        {columnItem.header}
+                      </InputLabel>
+                      <Divider />
+                      <TextField
+                        key={index}
+                        id={columnItem.accessorKey}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                      />
+                    </>
+                  ))}
+              </Grid>
             </Grid>
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Close
+          </Button>
+          <Button onClick={handleSave} color="primary">
+            Save
           </Button>
         </DialogActions>
       </Dialog>
