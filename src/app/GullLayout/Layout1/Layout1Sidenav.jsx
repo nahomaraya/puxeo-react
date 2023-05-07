@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { navigations } from "../../navigations";
+import { getNavigations } from "app/navigations";
 import { merge } from "lodash";
 import { classList, isMobile } from "@utils";
 import Srcollbar from "react-perfect-scrollbar";
@@ -19,6 +19,10 @@ import BasicModal from "app/views/ui-kits/modals/BasicModal";
 import FormsWizard from "app/views/forms/FormsWizard";
 import { ModalContext, ModalProvider } from "app/providers/ModalContext";
 
+import Loader from "./Loader";
+
+import axios from "axios";
+
 class Layout1Sidenav extends Component {
   windowListener = null;
 
@@ -26,6 +30,7 @@ class Layout1Sidenav extends Component {
     selectedItem: null,
     navOpen: true,
     secondaryNavOpen: false,
+    navigations: []
   };
 
   onMainItemMouseEnter = (item) => {
@@ -117,7 +122,9 @@ class Layout1Sidenav extends Component {
     );
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    const result = await getNavigations();
+    this.setState({ navigations: result });
     if (this.state.selectedItem === null) this.closeSecSidenav();
 
     if (window)
@@ -134,6 +141,7 @@ class Layout1Sidenav extends Component {
         this.openSidenav();
       }
     });
+  
   }
 
   componentWillUnmount() {
@@ -144,11 +152,10 @@ class Layout1Sidenav extends Component {
 
   render() {
     let { settings } = this.props;
+    const { navigations } = this.state;
 
     return (
-
       <div className="side-content-wrap">
-     
         <Srcollbar
           className={classList({
             "sidebar-left o-hidden rtl-ps-none": true,
@@ -192,7 +199,7 @@ class Layout1Sidenav extends Component {
             ))}
           </ul>
         </Srcollbar>
-        
+
         <ScrollBar
           className={classList({
             "sidebar-left-secondary o-hidden rtl-ps-none": true,
@@ -200,17 +207,31 @@ class Layout1Sidenav extends Component {
           })}
         >
           <ModalProvider>
-             <BasicModal
-                centered={true}
-                name="Create a new Space?"
-              ><FormsWizard  /></BasicModal>
-              </ModalProvider>
+            <BasicModal centered={true} name="Create a new Space?">
+              <FormsWizard />
+            </BasicModal>
+          </ModalProvider>
           {this.state.selectedItem && this.state.selectedItem.sub && (
-        
-            <DropDownMenu
-              menu={this.state.selectedItem.sub}
-              closeSecSidenav={this.closeSecSidenav}
-            ></DropDownMenu>
+            <React.Fragment>
+              {/* {typeof this.state.selectedItem.sub === "function" && (
+                <React.Fragment>
+                  
+                  {this.state.menu && (
+                    <DropDownMenu
+                      menu={this.state.menu}
+                      closeSecSidenav={this.closeSecSidenav}
+                    />
+                  )}
+                </React.Fragment>
+              )} */}
+
+              {Array.isArray(this.state.selectedItem.sub) && (
+                <DropDownMenu
+                  menu={this.state.selectedItem.sub}
+                  closeSecSidenav={this.closeSecSidenav}
+                ></DropDownMenu>
+              )}
+            </React.Fragment>
           )}
           <span></span>
         </ScrollBar>

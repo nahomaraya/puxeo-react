@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { navigations } from "../../navigations";
+import { getNavigations } from "app/navigations";
 import { merge } from "lodash";
 import { classList } from "@utils";
 import Srcollbar from "react-perfect-scrollbar";

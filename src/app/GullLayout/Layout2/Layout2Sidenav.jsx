@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { navigations } from "../../navigations";
+import { getNavigations } from "app/navigations";
 import { merge } from "lodash";
 import { classList, isMobile } from "@utils";
 import Srcollbar from "react-perfect-scrollbar";
@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
 
 class Layout2Sidenav extends Component {
   windowListener = null;
@@ -24,7 +25,8 @@ class Layout2Sidenav extends Component {
   };
 
   findSelecteditem = () => {
-    navigations.forEach((item) => {
+  
+    getNavigations().forEach((item) => {
       if (item.sub) {
         item.sub.forEach((child) => {
           if (child.sub) {
@@ -53,6 +55,7 @@ class Layout2Sidenav extends Component {
     this.setState({ selectedItem });
     // console.log(selectedItem);
   };
+ 
 
   removeSelected = () => {
     this.setState({ selectedItem: null });
@@ -92,6 +95,7 @@ class Layout2Sidenav extends Component {
         },
       })
     );
+    
   };
 
   componentDidMount() {
@@ -124,6 +128,9 @@ class Layout2Sidenav extends Component {
     let { settings } = this.props;
     let { selectedItem } = this.state;
 
+   
+
+
     return (
       <div className="side-content-wrap">
         <Srcollbar
@@ -133,7 +140,7 @@ class Layout2Sidenav extends Component {
           })}
         >
           <ul className="navigation-left">
-            {navigations.map((item, i) => (
+            {getNavigations().map((item, i) => (
               <li
                 className={classList({
                   "nav-item": true,

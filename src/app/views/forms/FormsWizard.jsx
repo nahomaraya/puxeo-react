@@ -2,14 +2,19 @@ import React, { Component } from "react";
 import { Breadcrumb } from "@gull";
 import StepWizard from "react-step-wizard";
 import FormWizardNav from "./FormWizardNav";
-import { Button } from "react-bootstrap";
+
+import { Modal, Button } from "react-bootstrap";
 import FormBasic from "./FormBasic";
-import { SpaceForm, ColorSelector, StatusAdder, Summary } from "./SpaceForm";
+import {
+  SpaceForm,
+  ColorSelector,
+  StatusAdder,
+  Summary,
+  ConfirmationPage,
+} from "./SpaceForm";
 import { ModalContext } from "app/providers/ModalContext";
 
-
 class FormsWizard extends Component {
-  
   constructor(props) {
     super(props);
 
@@ -17,7 +22,6 @@ class FormsWizard extends Component {
       name: "",
       color: "#000000",
       statuses: [],
-     
     };
 
     this.setName = this.setName.bind(this);
@@ -27,7 +31,7 @@ class FormsWizard extends Component {
   }
 
   setName(name) {
-    console.log(name)
+    console.log(name);
     this.setState({ name });
   }
 
@@ -39,28 +43,60 @@ class FormsWizard extends Component {
     this.setState({ statuses });
   }
   handleSubmit() {
-    console.log("Submitted")
-    console.log(this.state.name)
-    console.log(this.state.color)
-   
-   
-
-    // Make a POST request to the API endpoint with the form data
+    console.log("Submitted");
+    console.log(this.state.name);
+    console.log(this.state.color);
+    console.log(this.state.statuses);
+  
+    // Make a POST request to create the "Spaces" document
     fetch("/api/resource/Spaces", {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         name1: this.state.name,
         color: this.state.color,
-       // statuses: statuses,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+  
+        // Create an array of "Puxeo Status" documents to be created
+        const statusesData = this.state.statuses.map((status, key) => {
+          return {
+          
+            name1: status.name,
+            color: status.color,
+            is_custom: 0,
+            space: data.data.name,
+          };
+        });
+        console.log(statusesData)
+        // Make a POST request to create the "Puxeo Status" documents
+        fetch("/api/resource/Puxeo Statuses", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            {
+              docs: statusesData,
+            }
+           
+          ),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+  
         // Reset the form state after submission
         this.setState({
           name: "",
@@ -74,8 +110,6 @@ class FormsWizard extends Component {
   }
 
   render() {
-    
-    
     return (
       <div>
         {/* <Breadcrumb
@@ -94,35 +128,47 @@ class FormsWizard extends Component {
               {/* this is just for example, add your own component here */}
 
               <FirstComponent hashkey={"first"}>
-              <div >
-                <SpaceForm name={this.state.name} setName={this.setName} child={this.props.child} />
+                <div>
+                  <SpaceForm
+                    name={this.state.name}
+                    setName={this.setName}
+                    child={this.props.child}
+                  />
                 </div>
               </FirstComponent>
               <FirstComponent hashkey={"second"}>
-              <div>
-                <ColorSelector
-                  color={this.state.color}
-                  setColor={this.setColor}
-                />
-              </div>
+                <div>
+                  <ColorSelector
+                    color={this.state.color}
+                    setColor={this.setColor}
+                  />
+                </div>
               </FirstComponent>
               <FirstComponent hashkey={"third"}>
-              <div >
-                <StatusAdder
-                  statuses={this.state.statuses}
-                  setStatuses={this.setStatuses}
-                />
-                </div> 
+                <div>
+                  <StatusAdder
+                    statuses={this.state.statuses}
+                    setStatuses={this.setStatuses}
+                  />
+                </div>
               </FirstComponent>
-              <FirstComponent hashkey={"fourth"} handleSubmit={this.handleSubmit}>
+              <FirstComponent
+                hashkey={"fourth"}
+                handleSubmit={this.handleSubmit}
+              >
+                <div>
+                  <Summary
+                    name={this.state.name}
+                    color={this.state.color}
+                    statuses={this.state.statuses}
+                  />
+                </div>
+              </FirstComponent>
+              {/* <FirstComponent hashkey={"fifth"} handleSubmit={this.handleSubmit}>
               <div >
-                <Summary
-                  name={this.state.name}
-                  color={this.state.color}
-                  statuses={this.state.statuses}
-                />
+                <ConfirmationPage  child={this.props.child} />
               </div>
-              </FirstComponent>
+              </FirstComponent> */}
             </StepWizard>
           </div>
         </div>
@@ -135,10 +181,21 @@ export default FormsWizard;
 
 class FirstComponent extends Component {
   static contextType = ModalContext;
-  state = {};
+  state = {
+    showConfirmationModal: false,
+  };
   handleCancel = () => {
     this.props.firstStep();
     this.props.onCancel();
+  };
+  handleFinish = () => {
+    this.props.handleSubmit();
+    this.setState({ showConfirmationModal: true });
+  };
+  handleCloseConfirmationModal = () => {
+    this.setState({ showConfirmationModal: false });
+    this.props.lastStep();
+    this.context.setShowModal(false);
   };
   render() {
     const { showModal, setShowModal } = this.context;
@@ -183,14 +240,32 @@ class FirstComponent extends Component {
             disabled={false}
             className="mx-1"
             variant="primary"
-            onClick={() => {
-              lastStep();
-              this.props.handleSubmit(); // call the handleSubmit function
-            }}
+            onClick={this.handleFinish}
           >
             Finish
           </Button>
         </div>
+
+        <Modal
+          show={this.state.showConfirmationModal}
+          onHide={this.handleCloseConfirmationModal}
+        >
+          <Modal.Body className="text-center">
+            <i
+              className="fa fa-check-circle text-success mb-3"
+              style={{ fontSize: "3rem" }}
+            ></i>
+            <p>Action completed successfully!</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={this.handleCloseConfirmationModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

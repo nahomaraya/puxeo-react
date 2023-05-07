@@ -10,7 +10,7 @@ import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { withRouter, Link } from "react-router-dom";
 
 import { merge } from "lodash";
-import { navigations } from "app/navigations";
+import { getNavigations } from "app/navigations";
 import ScrollBar from "react-perfect-scrollbar";
 import MegaMenu from "@gull/components/MegaMenu";
 
@@ -269,7 +269,7 @@ class Layout3Header extends Component {
             <div className="container-fluid">
               <ScrollBar className="topnav position-relative rtl-ps-none">
                 <ul className="menu float-left">
-                  {navigations.map((parent, index) => (
+                  {getNavigations().map((parent, index) => (
                     <li key={index}>
                       <div>
                         <div>

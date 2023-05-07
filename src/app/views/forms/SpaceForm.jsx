@@ -194,3 +194,15 @@ export const Summary = (props) => {
   </div>
   );
 };
+
+export const ConfirmationPage = (props) => {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ fontSize: "5rem", color: "green" }}>
+        <i className="fas fa-check-circle"></i>
+      </div>
+      <h2>{props.child} created successfully</h2>
+      <p>Reload the page to see the changes.</p>
+    </div>
+  );
+};
