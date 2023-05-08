@@ -62,40 +62,58 @@ class FormsWizard extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
+        
   
         // Create an array of "Puxeo Status" documents to be created
-        const statusesData = this.state.statuses.map((status, key) => {
+        const createStatus = (statusData) => {
+          console.log(statusData)
+          return fetch("/api/resource/Puxeo Statuses", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+             
+            },
+            body: JSON.stringify(statusData),
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            console.log(response.json)
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success:", data);
+            return data;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        };
+        
+        const statusesData = this.state.statuses.map((status) => {
           return {
-          
             name1: status.name,
             color: status.color,
             is_custom: 0,
             space: data.data.name,
           };
         });
-        console.log(statusesData)
-        // Make a POST request to create the "Puxeo Status" documents
-        fetch("/api/resource/Puxeo Statuses", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(
-            {
-              docs: statusesData,
-            }
-           
-          ),
+        
+        const promises = statusesData.map((statusData) => {
+          console.log(statusData)
+          return createStatus(statusData);
+        });
+        
+        Promise.all(promises)
+        .then((results) => {
+          console.log(results)
+          console.log("All statuses created:", results);
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+        .catch((error) => {
+          console.error("Error creating statuses:", error);
+        });
   
         // Reset the form state after submission
         this.setState({
