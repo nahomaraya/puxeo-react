@@ -49,7 +49,7 @@ export async function getNavigations() {
   const updatedSub = await getERPList();
   const navigations = [
     {
-      name: "Dashboard",
+      name: "ERP Module",
       description: "Lorem ipsum dolor sit.",
       type: "dropDown",
       icon: "i-Bar-Chart",
