@@ -11,7 +11,7 @@ class AuthGuard extends Component {
     let { routes } = context;
 
     this.state = {
-      authenticated: true,
+      authenticated: false,
       routes
     };
   }

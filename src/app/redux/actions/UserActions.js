@@ -1,5 +1,6 @@
 import history from "@history.js";
 import jwtAuthService from "../../services/jwtAuthService";
+import { erpNextAuthService } from "app/services/erpnext/erpnextAuthService";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -16,7 +17,8 @@ export function setUserData(user) {
 
 export function logoutUser() {
   return dispatch => {
-    jwtAuthService.logout();
+    erpNextAuthService.logout()
+    //jwtAuthService.logout();
 
     history.push({
       pathname: "/session/signin"

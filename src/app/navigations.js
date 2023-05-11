@@ -1,21 +1,47 @@
 import axios from "axios";
+const axiosWithAuth = axios.create({
+  auth: {
+    username: "25780e2360f025d",
+    password: "afec298ebaa3d92",
+  },
+});
+
 async function getERPList() {
   try {
-    const response = await axios.get(`/api/resource/Spaces?fields=["name1", "color"]`);
+    const response = await axios.get(
+      `/api/resource/Spaces?fields=[ "name","name1", "color"]`
+    );
     const data = response.data.data;
-    const updatedList = data.map((erp) => {
+    const promises = data.map(async (erp) => {
+      const projectsResponse = await axiosWithAuth.get(
+        `/api/resource/Project?fields=["project_name"]&filters=[["space", "=", "${erp.name}"]]`
+      );
+      const projectsData = projectsResponse.data.data;
+
+      const sub = projectsData.map((project) => {
+        return {
+          name: project.project_name,
+          type: "link",
+          path: `/projects/${project.project_name}`,
+        };
+      });
+      console.log(erp.name)
+
       return {
         icon: "i-One-Window",
         name: erp.name1,
-        path: "/projects/Project2",
         type: "link",
-        child: "Folder",
+        child: "Project",
         color: erp.color,
+        sub: sub,
       };
     });
+    const updatedList = await Promise.all(promises);
+    console.log(updatedList)
     return updatedList;
   } catch (error) {
     console.log(error);
+    console.log("error here")
     return [];
   }
 }
@@ -27,8 +53,8 @@ export async function getNavigations() {
       description: "Lorem ipsum dolor sit.",
       type: "dropDown",
       icon: "i-Bar-Chart",
-      sub: updatedSub
-    }
+      sub: updatedSub,
+    },
   ];
   return navigations;
 }
@@ -53,7 +79,7 @@ export async function getNavigations() {
 //         path: "/dashboard/v1",
 //         type: "link",
 //         child: "Folder",
-        
+
 //         sub: [
 //           {
 //             icon: "i-Folder",
@@ -75,12 +101,9 @@ export async function getNavigations() {
 //                 path: "/projects/Project2"
 //               },
 //             ]
-           
-          
+
 //           },
-         
-          
-          
+
 //         ]
 //       },
 //       {
@@ -89,7 +112,7 @@ export async function getNavigations() {
 //         type: "link",
 //         path: "/task-manager",
 //         child: "Folder",
-        
+
 //         sub: [
 //           {
 //             icon: "i-Folder",
@@ -135,15 +158,13 @@ export async function getNavigations() {
 
 //             ]
 //           },
-         
-          
+
 //         ]
 //       },
-     
-      
+
 //     ]
 //   },
-  
+
 //   // {
 //   //   name: "UI kits",
 //   //   description: "Lorem ipsum dolor sit.",
@@ -431,7 +452,7 @@ export async function getNavigations() {
 //   //           type: "link",
 //   //           path: "/contact/list"
 //   //         },
-          
+
 //   //         {
 //   //           icon: "i-Find-User",
 //   //           name: "Contact Details",
@@ -809,5 +830,5 @@ export async function getNavigations() {
 //   //     }
 //   //   ]
 //   // },
- 
+
 // ];

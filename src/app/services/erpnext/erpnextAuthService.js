@@ -19,30 +19,34 @@ import axios from "axios";
 
 class ErpNextAuthService {
   login = (username, password) => {
-    return axios.post("https://erpnext.puxeo.com/api/method/login", {
+    return axios.post("/api/method/login", 
+    
+    {
       usr: username,
       pwd: password,
     });
   };
 
   getUserData = (userId) => {
-    return axios.get(`https://erpnext.puxeo.com/api/resource/User/${userId}`);
+    return axios.get(`/api/resource/User/${userId}`);
   };
 
   getAllUsers = () => {
-    return axios.get("https://erpnext.puxeo.com/api/resource/User");
+    return axios.get("/api/resource/User");
   };
 
   logout = () => {
-    return axios.get("https://erpnext.puxeo.com/api/method/logout");
+    return axios.get("/api/method/logout");
   };
 
   checkAuthStatus = (callback) => {
     axios
-      .get("https://erpnext.puxeo.com/api/method/frappe.auth.get_logged_user", {
-        headers: {
-          Authorization: "31f5476617a64a5:0c517a731702e33",
-        },
+      .get("/api/method/frappe.auth.get_logged_user", {
+     
+        auth: {
+          username: "25780e2360f025d",
+          password: "afec298ebaa3d92"
+        }
       })
       .then((response) => {
         if (response.data && response.data.message) {

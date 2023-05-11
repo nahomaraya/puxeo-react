@@ -49,11 +49,16 @@ export function resetPassword({ email }) {
 
 export function erpnextLoginEmailPassword({ email, password }) {
   return dispatch => {
+    dispatch({
+      type: LOGIN_LOADING
+    });
     erpNextAuthService.login(email, password)
       .then(response => {
-        console.log(response)
+       
         if (response.status==200) {
           console.log("success");
+          console.log(response.data);
+          dispatch(setUserData(response.data));
           history.push({ pathname: "/" });
           return dispatch({ type: LOGIN_SUCCESS });
         }

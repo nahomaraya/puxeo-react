@@ -38,39 +38,51 @@ class Auth extends Component {
   };
 
   checkErpNextAuth = () => {
-    const authUser = localStorageService.getItem("auth_user");
+    erpNextAuthService.checkAuthStatus(user => {
+      if (user) {
+        console.log(user)
+        // User is already authenticated, set user data from local storage
+        this.props.setUserData(user);
+        console.log("authebitcated")
+      } else {
+        console.log("non authienticated")
+      }
 
-    if (authUser) {
-      // User is already authenticated, set user data from local storage
-      this.props.setUserData(authUser);
-    } else {
-      // User is not authenticated, try to log in with credentials
-      const username = "your-username";
-      const password = "your-password";
+    })
 
-      erpNextAuthService.login(username, password)
-        .then(response => {
-          // Authentication successful, retrieve user data and set state
-          const userId = response.data.full_name;
-          erpNextAuthService.getUserData(userId)
-            .then(response => {
-              const user = {
-                id: userId,
-                name: response.data.full_name,
-                email: response.data.email,
-                // Add any other user data you need here
-              };
-              this.props.setUserData(user);
-              localStorageService.setItem("auth_user", user);
-            })
-            .catch(error => {
-              // Handle error retrieving user data
-            });
-        })
-        .catch(error => {
-          // Handle authentication error
-        });
-    }
+    // if (authUser) {
+    //   // User is already authenticated, set user data from local storage
+    //   this.props.setUserData(authUser);
+    //   console.log("authebitcated")
+    // } else {
+    //   console.log("non authienticated")
+    //   // User is not authenticated, try to log in with credentials
+    //   // const username = "your-username";
+    //   // const password = "your-password";
+
+    //   // erpNextAuthService.login(username, password)
+    //   //   .then(response => {
+    //   //     // Authentication successful, retrieve user data and set state
+    //   //     const userId = response.data.full_name;
+    //   //     erpNextAuthService.getUserData(userId)
+    //   //       .then(response => {
+    //   //         const user = {
+    //   //           id: userId,
+    //   //           name: response.data.full_name,
+    //   //           email: response.data.email,
+    //   //           // Addwatson@example.com any other user data you need here
+    //   //         };
+    //   //         this.props.setUserData(user);
+    //   //         localStorageService.setItem("auth_user", user);
+    //   //       })
+    //   //       .catch(error => {
+    //   //         // Handle error retrieving user data
+    //   //       });
+    //   //   })
+    //   //   .catch(error => {
+    //   //     // Handle authentication error
+    //   //   });
+    // }
   };
 
   render() {
