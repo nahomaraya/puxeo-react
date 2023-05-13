@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 
@@ -45,6 +45,12 @@ const Projects = () => {
     handleClose();
   };
   const { name } = useParams();
+  useEffect(() => {
+    console.log("reload")
+
+    // movieID on initial render or subsequent render when updated
+    // logic to use movieID and resynchronize any data.
+  }, [name]);
 
   const priority = ["Urgent", "High", "Medium", "Low"];
   const status = ["Open", "Completed", "Overdue"];
@@ -194,6 +200,7 @@ const Projects = () => {
     });
     setData(updatedData);
   };
+
 
   return (
     <Box

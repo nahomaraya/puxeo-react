@@ -1,9 +1,8 @@
 import React, { useState, Fragment, useContext } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { ModalContext } from "app/providers/ModalContext";
-import { MenuItem } from "react-contextmenu";
 
-const BasicModal = ({ name, children, ...props }) => {
+const MenuModal = ({ name, children, ...props }) => {
   const { showModal, setShowModal } = useContext(ModalContext);
   const [show, setShow] = useState(false);
 
@@ -13,20 +12,13 @@ const BasicModal = ({ name, children, ...props }) => {
 
   return (
     <Fragment style={{ maxWidth: "800px" }}>
-      { name === "Create a new Space?" ?
-      <Button
-      className={`text-capitalize ${
-        name === "btn-primary"
-      }`}
-      onClick={() => setShowModal(true)}
-    >
-      {name || "Launch demo modal"}
-    </Button>:
-    <MenuItem  onClick={() => setShowModal(true)}>
-      {name || "Launch demo modal"}
-    </MenuItem>
-    }
       
+      <Button
+       
+        onClick={() => setShowModal(true)}
+      >
+        {name || "Launch demo modal"}
+      </Button>
       <Modal show={showModal} onHide={handleClose} {...props}>
         <Modal.Header closeButton style={{ background: "#800080" }}>
           <Modal.Title style={{ color: "white" }}>{name}</Modal.Title>
@@ -53,4 +45,4 @@ const BasicModal = ({ name, children, ...props }) => {
   );
 };
 
-export default BasicModal;
+export default MenuModal;
