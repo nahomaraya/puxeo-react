@@ -64,13 +64,16 @@ export const ColorSelector = (props) => {
   );
 };
 
+
+
 export const StatusAdder = (props) => {
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(-1);
+  const [selectedOption, setSelectedOption] = useState("Use Space Statuses");
 
   function handleAddStatus() {
-    if (!name || !color) { // check if both name and color are provided
+    if (!name || !color || selectedOption === "Use Space Statuses") {
       return;
     }
 
@@ -88,10 +91,16 @@ export const StatusAdder = (props) => {
     props.setStatuses(newStatuses);
   }
 
+  function handleOptionChange(event) {
+    const optionValue = event.target.value;
+    setSelectedOption(optionValue);
+    props.setSelectedOption(optionValue);
+  }
+
   return (
     <div className="">
       <div className="">
-        <h4  style={{ fontWeight: "bold" }}>Add Status</h4>
+        <h4 style={{ fontWeight: "bold" }}>Add Status</h4>
         <div className="card mb-5">
           <div className="card-body">
             <div className="form-group mb-3">
@@ -102,6 +111,7 @@ export const StatusAdder = (props) => {
                 className="form-control"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                disabled={selectedOption === "Use Space Statuses"}
               />
             </div>
             <div className="form-group mb-3">
@@ -112,9 +122,28 @@ export const StatusAdder = (props) => {
                 className="form-control"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
+                disabled={selectedOption === "Use Space Statuses"}
               />
             </div>
-            <button className="btn btn-primary" onClick={handleAddStatus}>
+            <div className="form-group mb-3">
+              <label htmlFor="option">Select Option</label>
+              <select
+                id="option"
+                className="form-control"
+                value={selectedOption}
+                onChange={handleOptionChange}
+              >
+                <option value="Use Space Statuses">Use Space Statuses</option>
+                <option value="Create Custom Statuses">
+                  Create Custom Statuses
+                </option>
+              </select>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={handleAddStatus}
+              disabled={selectedOption === "Use Space Statuses"}
+            >
               Add Status
             </button>
           </div>
@@ -122,7 +151,7 @@ export const StatusAdder = (props) => {
         {props.statuses.length > 0 && (
           <div className="card mb-5">
             <div className="card-body">
-              <h4  style={{ fontWeight: "bold" }}>Select Status</h4>
+              <h4 style={{ fontWeight: "bold" }}>Select Status</h4>
               <p>Click on a status to select it.</p>
               <div className="status-options">
                 {props.statuses.map((status, index) => (
@@ -136,20 +165,17 @@ export const StatusAdder = (props) => {
                       backgroundColor: status.color,
                       borderRadius: "10px",
                       color: "white",
-                    
                     }}
                   >
-                     <button
+                    <button
                       type="button"
                       className="close"
                       aria-label="Close"
                       onClick={() => removeStatus(index)}
-                    
                     >
                       <span aria-hidden="true">&times;</span>
                     </button>
                     {status.name}
-                   
                   </div>
                 ))}
               </div>

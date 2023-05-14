@@ -22,6 +22,7 @@ class FormsWizard extends Component {
       name: "",
       color: "#000000",
       statuses: [],
+      selectedOption: "Use Space Statuses"
     };
 
     this.setName = this.setName.bind(this);
@@ -42,89 +43,178 @@ class FormsWizard extends Component {
   setStatuses(statuses) {
     this.setState({ statuses });
   }
+  setSelectedOption(selectedOption){
+    this.setSelectedOption(selectedOption)
+  }
   handleSubmit() {
     console.log("Submitted");
     console.log(this.state.name);
     console.log(this.state.color);
     console.log(this.state.statuses);
   
-    // Make a POST request to create the "Spaces" document
-    fetch("/api/resource/Spaces", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name1: this.state.name,
-        color: this.state.color,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        
+    if (this.props.child === "space") {
+      // Make a POST request to create the "Spaces" document
+      fetch("/api/resource/Spaces", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name1: this.state.name,
+          color: this.state.color,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Space created:", data);
   
-        // Create an array of "Puxeo Status" documents to be created
-        const createStatus = (statusData) => {
-          console.log(statusData)
-          return fetch("/api/resource/Puxeo Statuses", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-             
-            },
-            body: JSON.stringify(statusData),
-          })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            console.log(response.json)
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Success:", data);
-            return data;
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-        };
-        
-        const statusesData = this.state.statuses.map((status) => {
-          return {
-            name1: status.name,
-            color: status.color,
-            is_custom: 0,
-            space: data.data.name,
+          // Create an array of "Puxeo Status" documents to be created
+          const createStatus = (statusData) => {
+            console.log(statusData);
+            return fetch("/api/resource/Puxeo Statuses", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(statusData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                console.log(response.json);
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Success:", data);
+                return data;
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
           };
-        });
-        
-        const promises = statusesData.map((statusData) => {
-          console.log(statusData)
-          return createStatus(statusData);
-        });
-        
-        Promise.all(promises)
-        .then((results) => {
-          console.log(results)
-          console.log("All statuses created:", results);
+  
+          const statusesData = this.state.statuses.map((status) => {
+            return {
+              name1: status.name,
+              color: status.color,
+              is_custom: 0,
+              space: data.data.name,
+            };
+          });
+  
+          const promises = statusesData.map((statusData) => {
+            console.log(statusData);
+            return createStatus(statusData);
+          });
+  
+          Promise.all(promises)
+            .then((results) => {
+              console.log(results);
+              console.log("All statuses created:", results);
+            })
+            .catch((error) => {
+              console.error("Error creating statuses:", error);
+            });
+  
+          // Reset the form state after submission
+          this.setState({
+            name: "",
+            color: "#000000",
+            statuses: [],
+          });
         })
         .catch((error) => {
-          console.error("Error creating statuses:", error);
+          console.error("Error:", error);
         });
+    } else if (this.props.child === "project") {
+      // Determine whether to use custom statuses or not
+      const isCustomStatuses = this.state.selectedOption !== "Use Space Statuses";
   
-        // Reset the form state after submission
-        this.setState({
-          name: "",
-          color: "#000000",
-          statuses: [],
-        });
+      // Make a POST request to create the "Project" document
+      fetch("/api/resource/Project", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject: this.state.name,
+          status: "Open",
+          project_status: "Open",
+          color: this.state.color,
+          is_custom: !isCustomStatuses, // Set is_custom based on selectedOption
+        }),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Project created:", data);
+  
+          // Create an array of "Puxeo Status" documents to be created
+          const createStatus = (statusData) => {
+            console.log(statusData);
+            return fetch("/api/resource/Puxeo Statuses", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(statusData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                console.log(response.json);
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Success:", data);
+                return data;
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          };
+  
+          // Create status documents if using custom statuses
+          if (isCustomStatuses) {
+            const statusData = this.state.statuses.map((status) => {
+              return {
+                name1: status.name,
+                color: status.color,
+                is_custom: 1,
+                project: data.data.name,
+              };
+            });
+  
+            const promises = statusData.map((statusData) => {
+              return createStatus(statusData);
+            });
+  
+            Promise.all(promises)
+              .then((results) => {
+                console.log(results);
+                console.log("All status created:", results);
+              })
+              .catch((error) => {
+                console.error("Error creating tasks:", error);
+              });
+          }
+  
+          // Reset the form state after submission
+          this.setState({
+            name: "",
+            color: "#000000",
+            statuses: [],
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   }
 
   render() {
@@ -167,6 +257,7 @@ class FormsWizard extends Component {
                   <StatusAdder
                     statuses={this.state.statuses}
                     setStatuses={this.setStatuses}
+                    setSelectedOption={this.setSelectedOption}
                   />
                 </div>
               </FirstComponent>
