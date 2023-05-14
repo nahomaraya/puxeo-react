@@ -7,7 +7,7 @@ export const DataContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const projectName = window.location.pathname.split("/")[2];
+    const projectName = window.location.pathname.split("/")[3];
     console.log(projectName === "all");
     const axiosWithAuth = axios.create({
       auth: {

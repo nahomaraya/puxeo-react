@@ -19,6 +19,7 @@ import {
 import { data } from "./data";
 import { DataContext } from "app/providers/DataContext";
 import Table2 from "./Table";
+import axios from "axios";
 
 const useStyles = makeStyles({
   dialog: {
@@ -44,16 +45,33 @@ const Projects = () => {
     // Handle save logic here
     handleClose();
   };
-  const { name } = useParams();
-  useEffect(() => {
-    console.log("reload")
+  const { name, space } = useParams();
 
-    // movieID on initial render or subsequent render when updated
-    // logic to use movieID and resynchronize any data.
-  }, [name]);
+  const axiosWithAuth = axios.create({
+    auth: {
+      username: "25780e2360f025d",
+      password: "afec298ebaa3d92",
+    },
+  });
 
   const priority = ["Urgent", "High", "Medium", "Low"];
-  const status = ["Open", "Completed", "Overdue"];
+  const [status, setStatus] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosWithAuth.get(`/api/resource/Puxeo Statuses?fields=["name1","color"]&filters=[["space", "=", "${space}"]]`);
+        const data = await response.data;
+        const statusNames = data.data
+        setStatus(statusNames);
+        console.log(statusNames);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   const columns = useMemo(
     //column definitions...
@@ -201,7 +219,6 @@ const Projects = () => {
     setData(updatedData);
   };
 
-
   return (
     <Box
       sx={{
@@ -277,14 +294,18 @@ const Projects = () => {
             handleUpdate={handleUpdate}
           />
         ))}
-      {group == "status" &&
+      {group == "status" && status.length > 0 ? (
         status.map((priorityItem, key) => (
           <Table2
             groupBy={group}
-            value={priorityItem}
+            value={priorityItem.name1}
+            color={priorityItem.color}
             handleUpdate={handleUpdate}
           />
-        ))}
+        ))
+      ) : (
+        <p>Loading...</p>
+      )}
 
       <Dialog
         open={open}

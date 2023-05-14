@@ -155,7 +155,7 @@ class Layout1Sidenav extends Component {
     const { navigations } = this.state;
 
     return (
-      <div className="side-content-wrap">
+      <div className="side-content-wrap" style={{width: '100px'}}>
         <Srcollbar
           className={classList({
             "sidebar-left o-hidden rtl-ps-none": true,

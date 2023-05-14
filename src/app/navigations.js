@@ -22,7 +22,7 @@ async function getERPList() {
         return {
           name: project.project_name,
           type: "link",
-          path: `/projects/${project.project_name}`,
+          path: `/projects/${erp.name}/${project.project_name}`,
         };
       });
       console.log(erp.name)

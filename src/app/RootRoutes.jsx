@@ -24,7 +24,7 @@ const redirectRoute = [
   {
     path: "/",
     exact: true,
-    component: () => <Redirect to="/projects/all" />
+    component: () => <Redirect to="/projects/all/all" />
   }
 ];
 

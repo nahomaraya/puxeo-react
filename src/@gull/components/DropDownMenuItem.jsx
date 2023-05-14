@@ -112,58 +112,69 @@ class DropDownMenuItem extends Component {
           open: !collapsed,
         })}
       >
-        <div onClick={this.onItemClick} style={{ backgroundColor: color }}>
-        <i className="dd-arrow i-Arrow-Down"></i>
+        <div
+          onClick={this.onItemClick}
+          style={{
+            backgroundColor: color,
+            display: "flex",
+            alignItems: "start",
+          }}
+        >
+           <i
+            className="dd-arrow i-Arrow-Down"
+            style={{ marginRight: "20px" }}
+          ></i>
           <i className={`nav-icon ${icon}`}></i>
-         
           <span className="item-name">{name}</span>
-
          
-          <div>
-          <IconButton
-            id="demo-customized-button"
-            aria-controls={openMenu ? "demo-customized-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={openMenu ? "true" : undefined}
-            onClick={this.handleClick}
-          >
-            <MoreHorizIcon />
-          </IconButton>
-          <StyledMenu
-            id="demo-customized-menu"
-            MenuListProps={{
-              "aria-labelledby": "demo-customized-button",
-            }}
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={this.handleClose}
-          >
-            <MenuItem disableRipple>
-              <EditIcon />
 
-              <ModalProvider>
-                <BasicModal centered={true} name={`Create a new ${"project"}`}>
-                  <FormsWizard child={"project"} />
-                </BasicModal>
-              </ModalProvider>
-            </MenuItem>
-            <MenuItem onClick={this.handleClose} disableRipple>
-              <FileCopyIcon />
-              Duplicate
-            </MenuItem>
-            <Divider sx={{ my: 0.5 }} />
-            <MenuItem onClick={this.handleClose} disableRipple>
-              <ArchiveIcon />
-              Archive
-            </MenuItem>
-            <MenuItem onClick={this.handleClose} disableRipple>
+          <div>
+            <IconButton
+              id="demo-customized-button"
+              aria-controls={openMenu ? "demo-customized-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openMenu ? "true" : undefined}
+              onClick={this.handleClick}
+            >
               <MoreHorizIcon />
-              More
-            </MenuItem>
-          </StyledMenu>
+            </IconButton>
+            <StyledMenu
+              id="demo-customized-menu"
+              MenuListProps={{
+                "aria-labelledby": "demo-customized-button",
+              }}
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={this.handleClose}
+            >
+              <MenuItem disableRipple>
+                <EditIcon />
+
+                <ModalProvider>
+                  <BasicModal
+                    centered={true}
+                    name={`Create a new ${"project"}`}
+                  >
+                    <FormsWizard child={"project"} />
+                  </BasicModal>
+                </ModalProvider>
+              </MenuItem>
+              <MenuItem onClick={this.handleClose} disableRipple>
+                <FileCopyIcon />
+                Duplicate
+              </MenuItem>
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem onClick={this.handleClose} disableRipple>
+                <ArchiveIcon />
+                Archive
+              </MenuItem>
+              <MenuItem onClick={this.handleClose} disableRipple>
+                <MoreHorizIcon />
+                More
+              </MenuItem>
+            </StyledMenu>
+          </div>
         </div>
-        </div>
-        
 
         <ul
           className="submenu"

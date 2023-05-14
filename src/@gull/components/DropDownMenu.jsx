@@ -166,7 +166,7 @@ class DropDownMenu extends Component {
     });
 
   render() {
-    return <ul className="childNav">{this.renderLevels(this.props.menu)}</ul>;
+    return <ul className="childNav" >{this.renderLevels(this.props.menu)}</ul>;
   }
 }
 

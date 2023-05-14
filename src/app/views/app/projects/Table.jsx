@@ -218,7 +218,7 @@ const Table2 = (props) => {
       }}
       renderTopToolbarCustomActions={() => (
         <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap:"1.25rem"}} >
-          <span style={{backgroundColor: "#F87171", borderRadius: "0.375rem", padding: "0.5rem", paddingLeft: "2rem", paddingRight:"2rem", fontSize: "1.875rem", lineHeight:"2.25rem"  }} >
+          <span style={{backgroundColor: `${props.color}`, borderRadius: "0.375rem", padding: "0.5rem", paddingLeft: "2rem", paddingRight:"2rem", fontSize: "1.875rem", lineHeight:"2.25rem"  }} >
             {" "}
             {props.value}{" "}
           </span>
