@@ -10,6 +10,11 @@ const BasicModal = ({ name, children, ...props }) => {
   const handleClose = () => {
     setShowModal(false);
   };
+  const handlehide = () => {
+    setShowModal(false);
+
+
+  }
 
   return (
     <Fragment style={{ maxWidth: "800px" }}>
@@ -27,7 +32,7 @@ const BasicModal = ({ name, children, ...props }) => {
     </MenuItem>
     }
       
-      <Modal show={showModal} onHide={handleClose} {...props}>
+      <Modal show={showModal} onHide={ name === "Create a new Space?" ?handleClose: handlehide} {...props}>
         <Modal.Header closeButton style={{ background: "#800080" }}>
           <Modal.Title style={{ color: "white" }}>{name}</Modal.Title>
         </Modal.Header>

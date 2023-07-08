@@ -73,7 +73,7 @@ export const StatusAdder = (props) => {
   const [selectedOption, setSelectedOption] = useState("Use Space Statuses");
 
   function handleAddStatus() {
-    if (!name || !color || selectedOption === "Use Space Statuses") {
+    if (!name || !color) {
       return;
     }
 
@@ -111,7 +111,7 @@ export const StatusAdder = (props) => {
                 className="form-control"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                disabled={selectedOption === "Use Space Statuses"}
+                
               />
             </div>
             <div className="form-group mb-3">
@@ -122,10 +122,10 @@ export const StatusAdder = (props) => {
                 className="form-control"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                disabled={selectedOption === "Use Space Statuses"}
+               
               />
             </div>
-            <div className="form-group mb-3">
+            {/* <div className="form-group mb-3">
               <label htmlFor="option">Select Option</label>
               <select
                 id="option"
@@ -138,11 +138,11 @@ export const StatusAdder = (props) => {
                   Create Custom Statuses
                 </option>
               </select>
-            </div>
+            </div> */}
             <button
               className="btn btn-primary"
               onClick={handleAddStatus}
-              disabled={selectedOption === "Use Space Statuses"}
+            
             >
               Add Status
             </button>

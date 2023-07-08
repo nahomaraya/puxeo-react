@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { getNavigations } from "app/navigations";
+import { getNavigations, } from "app/navigations";
 import { merge } from "lodash";
 import { classList, isMobile } from "@utils";
 import Srcollbar from "react-perfect-scrollbar";
@@ -208,7 +208,7 @@ class Layout1Sidenav extends Component {
         >
           <ModalProvider>
             <BasicModal centered={true} name="Create a new Space?">
-              <FormsWizard />
+              <FormsWizard child={"space"} />
             </BasicModal>
           </ModalProvider>
           {this.state.selectedItem && this.state.selectedItem.sub && (

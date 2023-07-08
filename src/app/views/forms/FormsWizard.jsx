@@ -51,6 +51,7 @@ class FormsWizard extends Component {
     console.log(this.state.name);
     console.log(this.state.color);
     console.log(this.state.statuses);
+    console.log(this.props.child)
   
     if (this.props.child === "space") {
       // Make a POST request to create the "Spaces" document
