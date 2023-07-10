@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 
@@ -27,6 +27,8 @@ import { data } from "./data";
 import { DataContext } from "app/providers/DataContext";
 import Table2 from "./Table";
 import axios from "axios";
+import projectRoutes from "./projectRoutes";
+import { projectsData } from "app/data";
 
 const useStyles = makeStyles({
   dialog: {
@@ -60,7 +62,7 @@ const Projects = () => {
       password: "afec298ebaa3d92",
     },
   });
-
+  const { data, setData } = useContext(DataContext);
   const priority = ["Urgent", "High", "Medium", "Low"];
   const [status, setStatus] = useState([]);
   useEffect(() => {
@@ -183,7 +185,7 @@ const Projects = () => {
   const [hoveredTable, setHoveredTable] = useState(null);
 
   const [open, setOpen] = useState(false);
-  const [activeKeys, setActiveKeys] = useState([]);
+  const [activeKeys, setActiveKeys] = useState([0]);
 
   const handleAccordionClick = (eventKey) => {
     if (activeKeys.includes(eventKey)) {
@@ -238,187 +240,311 @@ const Projects = () => {
 
   return (
     <div>
-      <Breadcrumb
-        routeSegments={[
-          { name: "List", path: "/" },
-          { name: "Kanban", path: "/" },
-          { name: "Project Name", path: "/" },
-        ]}
-      ></Breadcrumb>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
-          background: "whitesmoke",
-          gap: "1rem",
-          overflow: "auto",
-          p: "20px",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div
-            style={{
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Breadcrumb
+          routeSegments={[
+            { name: "List", path: "/" },
+            { name: "Kanban", path: "/" },
+            { name: space, path: "/" },
+          ]}
+        />
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            variant="contained"
+            color="success"
+            onClick={handleClick}
+            style={{ marginRight: "10px" }}
+          >
+            Group By
+          </Button>
+          <Button variant="contained" color="primary">
+            Create a new project
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleUnclick}
+          >
+            <MenuItem
+              onClick={() => {
+                handleUnclick();
+                setGroup("priority");
+              }}
+            >
+              Priority
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleUnclick();
+                setGroup("status");
+              }}
+            >
+              Status
+            </MenuItem>
+          </Menu>
+        </div>
+      </div>
+      <Accordion activeKey={activeKeys}>
+        {projectsData.map((project, index) => (
+          <Box
+            sx={{
               display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              gap: "1.5rem",
+              flexDirection: "column",
+              gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
+              background: "whitesmoke",
+              gap: "1rem",
+              overflow: "auto",
+              p: "10px", // decrease padding
+              mt: "5px",
+              mb:"30px", // decrease margin-top
+              fontSize: "0.6rem", // decrease font size
+             // decrease height
             }}
           >
-            <h3 className="text-black text-4xl">{name}</h3>
-            <Button
-              onClick={handleAddRow}
-              variant="contained"
-              endIcon={<AddIcon />}
+            <Accordion.Item
+              eventKey={project}
+              className="ul-card__border-radius border-0 p-0 card"
             >
-              New Task
-            </Button>
-          </div>
-          <div>
-            <Button
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              variant="contained"
-              color="success"
-              onClick={handleClick}
-            >
-              Group By
-            </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleUnclick}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleUnclick();
-                  setGroup("priority");
-                }}
+              <Accordion.Header
+                className="mt-6"
+                onClick={() => handleAccordionClick(project)}
               >
-                Priority
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleUnclick();
-                  setGroup("status");
-                }}
-              >
-                Status
-              </MenuItem>
-            </Menu>
-          </div>
-        </div>
-        <Accordion activeKey={activeKeys} >
-          {group == "priority" &&
-            priority.map((priorityItem, key) => (
-              <Accordion.Item
-                eventKey={priorityItem}
-                className="ul-card__border-radius border-0 p-0 card"
-              >
-                <Accordion.Header onClick={() => handleAccordionClick(priorityItem)}>
-                  <h6 className="card-title mb-0 text-primary">
-                    {priorityItem}
-                  </h6>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <Table2
-                    groupBy={group}
-                    value={priorityItem}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          {group == "status" && status.length > 0 ? (
-            status.map((priorityItem, key) => (
-              <Accordion.Item
-                eventKey={priorityItem}
-                className="ul-card__border-radius border-0 p-0 card"
-              >
-                <Accordion.Header>
-                  <h6 className="card-title mb-0 text-primary">
-                    {priorityItem}
-                  </h6>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <Table2
-                    groupBy={group}
-                    value={priorityItem.name1}
-                    color={priorityItem.color}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-            ))
-          ) : (
-            <p>Loading...</p>
-          )}
-        </Accordion>
-
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          classes={{ paper: classes.dialog }}
-        >
-          <DialogTitle className={classes.header}>New Task</DialogTitle>
-
-          <DialogContent>
-            <form>
-              <Grid container direction="row" spacing={3}>
-                <Grid item xs={6}>
-                  {columns
-                    .slice(0, Math.ceil(columns.length / 2))
-                    .map((columnItem, index) => (
-                      <>
-                        <InputLabel htmlFor={columnItem.accessorKey}>
-                          {columnItem.header}
-                        </InputLabel>
-                        <Divider />
-                        <TextField
-                          key={index}
-                          id={columnItem.accessorKey}
-                          variant="outlined"
-                          fullWidth
-                          margin="normal"
-                        />
-                      </>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.6rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      gap: "1.5rem",
+                      fontSize: "0.6rem",
+                    }}
+                  >
+                    <h3 className="text-black text-xl">
+                      {project.project_name}
+                    </h3>
+                    <Button
+                      onClick={handleAddRow}
+                      variant="contained"
+                      endIcon={<AddIcon />}
+                    >
+                      New Task
+                    </Button>
+                  </div>
+                </div>
+              </Accordion.Header>
+              <Accordion.Body>
+                <Accordion activeKey={activeKeys}>
+                  {group == "priority" &&
+                    priority.map((priorityItem, key) => (
+                      <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        
+                        background: "whitesmoke",
+                        gap: "1rem",
+                        overflow: "auto",
+                        p: "0.5px", // decrease padding
+                        mt: "5px", // decrease margin-top
+                        fontSize: "0.6rem", // decrease font size
+                        // decrease height
+                      }}
+                    >
+                      <Accordion.Item
+                        eventKey={priorityItem}
+                        className="ul-card__border-radius border-0 p-0 card"
+                      >
+                        <Accordion.Header
+                          onClick={() => handleAccordionClick(priorityItem)}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-start",
+                              alignItems: "center",
+                              gap: "1.25rem",
+                            }}
+                          >
+                            <span
+                              style={{
+                              //  backgroundColor: `${props.color}`,
+                                borderRadius: "0.375rem",
+                                padding: "0.5rem",
+                                paddingLeft: "2rem",
+                                paddingRight: "2rem",
+                                fontSize: "1rem",
+                                lineHeight: "2.25rem",
+                              }}
+                            >
+                              {" "}
+                              {priorityItem}{" "}
+                            </span>
+                            <span
+                              style={{ fontSize: "1rem" }}
+                              className="texl-xl"
+                            >{` ${
+                              data.filter(
+                                (item) => item[group] === priorityItem
+                              ).length
+                            } tasks`}</span>
+                          </div>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <Table2
+                            projectName={project.project_name}
+                            groupBy={group}
+                            value={priorityItem}
+                            handleUpdate={handleUpdate}
+                          />
+                        </Accordion.Body>
+                      </Accordion.Item>
+                      </Box>
                     ))}
-                </Grid>
-                <Grid item xs={6}>
-                  {columns
-                    .slice(Math.ceil(columns.length / 2))
-                    .map((columnItem, index) => (
-                      <>
-                        <InputLabel htmlFor={columnItem.accessorKey}>
-                          {columnItem.header}
-                        </InputLabel>
-                        <Divider />
-                        <TextField
-                          key={index}
-                          id={columnItem.accessorKey}
-                          variant="outlined"
-                          fullWidth
-                          margin="normal"
-                        />
-                      </>
-                    ))}
-                </Grid>
-              </Grid>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Close
-            </Button>
-            <Button onClick={handleSave} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
+                  {group == "status" && status.length > 0 ? (
+                    status.map((priorityItem, key) => (
+                      <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
+                        background: "whitesmoke",
+                        gap: "1rem",
+                        overflow: "auto",
+                        p: "0.5px", // decrease padding
+                        mt: "5px", // decrease margin-top
+                        fontSize: "0.6rem", // decrease font size
+                        height: "40%", // decrease height
+                      }}
+                    >
+                      <Accordion.Item
+                        eventKey={priorityItem}
+                        className="ul-card__border-radius border-0 p-0 card"
+                      >
+                        <Accordion.Header  onClick={() => handleAccordionClick(priorityItem)}>
+                        <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-start",
+                              alignItems: "center",
+                              gap: "1.25rem",
+                            }}
+                          >
+                            <span
+                              style={{
+                              //  backgroundColor: `${props.color}`,
+                                borderRadius: "0.375rem",
+                                padding: "0.5rem",
+                                paddingLeft: "2rem",
+                                paddingRight: "2rem",
+                                fontSize: "1rem",
+                                lineHeight: "2.25rem",
+                              }}
+                            >
+                              {" "}
+                              {priorityItem}{" "}
+                            </span>
+                            <span
+                              style={{ fontSize: "1rem" }}
+                              className="texl-xl"
+                            >{` ${
+                              data.filter(
+                                (item) => item[group] === priorityItem
+                              ).length
+                            } tasks`}</span>
+                          </div>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <Table2
+                            projectName={project.project_name}
+                            groupBy={group}
+                            value={priorityItem.name1}
+                            color={priorityItem.color}
+                            handleUpdate={handleUpdate}
+                          />
+                        </Accordion.Body>
+                      </Accordion.Item>
+                      </Box>
+                    ))
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </Accordion>
+
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  classes={{ paper: classes.dialog }}
+                >
+                  <DialogTitle className={classes.header}>New Task</DialogTitle>
+
+                  <DialogContent>
+                    <form>
+                      <Grid container direction="row" spacing={3}>
+                        <Grid item xs={6}>
+                          {columns
+                            .slice(0, Math.ceil(columns.length / 2))
+                            .map((columnItem, index) => (
+                              <>
+                                <InputLabel htmlFor={columnItem.accessorKey}>
+                                  {columnItem.header}
+                                </InputLabel>
+                                <Divider />
+                                <TextField
+                                  key={index}
+                                  id={columnItem.accessorKey}
+                                  variant="outlined"
+                                  fullWidth
+                                  margin="normal"
+                                />
+                              </>
+                            ))}
+                        </Grid>
+                        <Grid item xs={6}>
+                          {columns
+                            .slice(Math.ceil(columns.length / 2))
+                            .map((columnItem, index) => (
+                              <>
+                                <InputLabel htmlFor={columnItem.accessorKey}>
+                                  {columnItem.header}
+                                </InputLabel>
+                                <Divider />
+                                <TextField
+                                  key={index}
+                                  id={columnItem.accessorKey}
+                                  variant="outlined"
+                                  fullWidth
+                                  margin="normal"
+                                />
+                              </>
+                            ))}
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                      Close
+                    </Button>
+                    <Button onClick={handleSave} color="primary">
+                      Save
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Box>
+        ))}
+      </Accordion>
     </div>
   );
 };

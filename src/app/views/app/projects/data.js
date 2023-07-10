@@ -1,3 +1,49 @@
+export const spacesData = [
+    {
+      name: "Space 1",
+      name1: "First Space",
+      color: "#FF0000",
+    },
+    {
+      name: "Space 2",
+      name1: "Second Space",
+      color: "#00FF00",
+    },
+    {
+      name: "Space 3",
+      name1: "Third Space",
+      color: "#0000FF",
+    },
+  ];
+  
+  export const projectsData = [
+    {
+      project_name: "PMVZW",
+      space: "Space 1",
+    },
+    {
+      project_name: "PuxeoBacklog",
+      space: "Space 1",
+    },
+    {
+      project_name: "Vaoix",
+      space: "Space 2",
+    },
+  
+    {
+      project_name: "SIO",
+      space: "Space 2",
+    },
+    {
+      project_name: "CherryFile",
+      space: "Space 3",
+    },
+    {
+      project_name: "UTIT",
+      space: "Space 3",
+    },
+  ];
+
 export const data = [
   {
       name: "TASK-2023-00001",

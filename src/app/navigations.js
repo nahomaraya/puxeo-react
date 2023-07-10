@@ -16,7 +16,7 @@ async function getERPList() {
         return {
           name: project.project_name,
           type: "link",
-          path: `/projects/${erp.name}/${project.project_name}`,
+         
         };
       });
       console.log(erp.name)
@@ -24,10 +24,11 @@ async function getERPList() {
       return {
         icon: "i-One-Window",
         name: erp.name1,
+        path: `/projects/${erp.name}`,
         type: "link",
         child: "Project",
         color: erp.color,
-        sub: sub,
+        
       };
     });
     const updatedList = await Promise.all(promises);

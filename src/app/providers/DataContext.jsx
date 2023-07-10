@@ -7,8 +7,8 @@ export const DataContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const projectName = window.location.pathname.split("/")[3];
-    console.log(projectName === "all");
+   const projectName = "all";
+    //console.log(projectName === "all");
     const axiosWithAuth = axios.create({
       auth: {
         username: "25780e2360f025d",
@@ -32,7 +32,7 @@ export const DataContextProvider = ({ children }) => {
       axiosWithAuth
 
         .get(
-          `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]&filters=[["project", "=", "${projectName}"]]`
+          `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]`
         )
         .then((response) => {
           setData(response.data.data);

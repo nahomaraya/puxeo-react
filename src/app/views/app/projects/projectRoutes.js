@@ -4,7 +4,7 @@ const Project = lazy(()=> import("./Projects"))
 
 const projectRoutes = [
     {
-      path: "/projects/:space/:name",
+      path: "/projects/:space",
       component: Project
     },
   

@@ -85,7 +85,7 @@ class GullLayout extends Component {
       <Suspense>
         <React.Fragment>
           <Layout routes={route.routes}></Layout>
-          {settings.customizer.show && <Customizer></Customizer>}
+          {/* {settings.customizer.show && <Customizer></Customizer>} */}
         </React.Fragment>
       </Suspense>
     );

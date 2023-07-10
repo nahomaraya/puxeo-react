@@ -8,7 +8,6 @@ import { Box, Button } from "@mui/material";
 import { HoverContext } from "app/providers/HoverContext";
 import { DataContext } from "app/providers/DataContext";
 
-
 const Table2 = (props) => {
   const columns = useMemo(
     //column definitions...
@@ -79,32 +78,33 @@ const Table2 = (props) => {
     //end
   );
 
-    //const [ rowData, setRowData ] = props.data;
-     
-    const { data, setData} = useContext(DataContext);
-    const {hoveredTable, setHoveredTable} = useContext(HoverContext);
-    const [draggingRow, setDraggingRow] = useState(null);
+  //const [ rowData, setRowData ] = props.data;
 
-    const commonTableProps = {
-        columns,
-        enableRowDragging: true,
-        enableFullScreenToggle: false,
-        muiTableContainerProps: {
-          sx: {
-            minHeight: "320px",
-          },
-        },
-        onDraggingRowChange: setDraggingRow,
-        state: { draggingRow },
-      };
-   
-     
-  
+  const { data, setData } = useContext(DataContext);
+  const { hoveredTable, setHoveredTable } = useContext(HoverContext);
+  const [draggingRow, setDraggingRow] = useState(null);
 
-    return(
-      <MaterialReactTable
+  const commonTableProps = {
+    columns,
+    enableRowDragging: true,
+    enableFullScreenToggle: false,
+    muiTableContainerProps: {
+      sx: {
+        minHeight: "320px",
+      },
+    },
+    onDraggingRowChange: setDraggingRow,
+    state: { draggingRow },
+  };
+
+  return (
+    <MaterialReactTable
       {...commonTableProps}
-      data={data.filter(item => item[props.groupBy] === props.value)}
+      data={data.filter(
+        (item) =>
+          item.project === props.projectName &&
+          item[props.groupBy] === props.value
+      )}
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
@@ -161,44 +161,29 @@ const Table2 = (props) => {
           total_costing_amount: false,
           total_billing_amount: false,
         },
+        
       }}
       paginateExpandedRows={false}
+      pageCount={5}
       defaultColumn={{
-        size: 100,
+        size: 30,
       }}
-      getRowId={(originalRow) => `table-${props.value}-${originalRow.firstName}`}
+      
+      getRowId={(originalRow) =>
+        `table-${props.value}-${originalRow.firstName}`
+      }
       muiTableBodyRowDragHandleProps={({ table }) => ({
         onDragEnd: () => {
           const { draggingRow, hoveredRow } = table.getState();
-         console.log(draggingRow.original.priority)
-          if (hoveredTable !==`table-${props.value}`) {
-            props.handleUpdate(draggingRow.original,  hoveredTable.slice(6), props.groupBy)
-            // switch (hoveredTable) {
-            //   case "table-2":
-            //    // setData((data) => [...data, draggingRow.original]);
-            //     handleUpdatePriority(draggingRow.original, "High")
-            //     break;
-            //   case "table-3":
-            //   //  setData((data) => [...data, draggingRow.original]);
-            //     handleUpdatePriority(draggingRow.original, "Medium")
-               
-            //     break;
-            //   case "table-4":
-            //     //  setData((data) => [...data, draggingRow.original]);
-            //       handleUpdatePriority(draggingRow.original, "Low")
-             
-            //       break;
-            //   default:
-            //     console.log("bloop");
-            //     break;
-            // }
-
-            // setData((data) =>
-            //   data.filter((d) => d !== draggingRow.original)
-            // );
-          } 
-          else if (hoveredRow && draggingRow) {
-           
+          console.log(draggingRow.original.priority);
+          if (hoveredTable !== `table-${props.value}`) {
+            props.handleUpdate(
+              draggingRow.original,
+              hoveredTable.slice(6),
+              props.groupBy
+            );
+          
+          } else if (hoveredRow && draggingRow) {
             data.splice(
               hoveredRow.index,
               0,
@@ -207,24 +192,49 @@ const Table2 = (props) => {
             setData([...data]);
           }
           setHoveredTable(null);
-          console.log(data.filter(item => item.priority === "Urgent"));
+        
         },
       })}
       muiTablePaperProps={{
         onDragEnter: () => setHoveredTable(`table-${props.value}`),
         sx: {
-          outline: hoveredTable === `table-${props.value}` ? "2px dashed pink" : undefined,
+          outline:
+            hoveredTable === `table-${props.value}`
+              ? "2px dashed pink"
+              : undefined,
         },
       }}
-      renderTopToolbarCustomActions={() => (
-        <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap:"1.25rem"}} >
-          <span style={{backgroundColor: `${props.color}`, borderRadius: "0.375rem", padding: "0.5rem", paddingLeft: "2rem", paddingRight:"2rem", fontSize: "1.875rem", lineHeight:"2.25rem"  }} >
-            {" "}
-            {props.value}{" "}
-          </span>
-          <span style={{ fontSize: "1.5rem"}} className="texl-xl">{` ${data.filter(item => item[props.groupBy] === props.value).length} tasks`}</span>
-        </div>
-      )}
+      cellStyle={{ fontSize: "0.7rem", padding: "1px" }}
+      headerStyle={{ fontSize: "0.7rem", padding: "1px" }}
+      
+      // renderTopToolbarCustomActions={() => (
+      //   <div
+      //     style={{
+      //       display: "flex",
+      //       justifyContent: "flex-start",
+      //       alignItems: "center",
+      //       gap: "1.25rem",
+      //     }}
+      //   >
+      //     <span
+      //       style={{
+      //         backgroundColor: `${props.color}`,
+      //         borderRadius: "0.375rem",
+      //         padding: "0.5rem",
+      //         paddingLeft: "2rem",
+      //         paddingRight: "2rem",
+      //         fontSize: "1rem",
+      //         lineHeight: "2.25rem",
+      //       }}
+      //     >
+      //       {" "}
+      //       {props.value}{" "}
+      //     </span>
+      //     <span style={{ fontSize: "1rem" }} className="texl-xl">{` ${
+      //       data.filter((item) => item[props.groupBy] === props.value).length
+      //     } tasks`}</span>
+      //   </div>
+      // )}
       renderDetailPanel={({ row }) => (
         <Box
           sx={{
@@ -235,15 +245,14 @@ const Table2 = (props) => {
             gridTemplateColumns: "1fr 1fr",
 
             width: "100%",
+            
           }}
         >
-          <textarea>sfkdjksdfjk</textarea>
+          {/* <textarea>sfkdjksdfjk</textarea> */}
         </Box>
       )}
     />
-
-    )
-
-}
+  );
+};
 
 export default Table2;
