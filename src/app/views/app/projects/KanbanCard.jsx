@@ -43,7 +43,7 @@ const TaskInformation = styled.div`
 
 const KanbanCard = ({ item, index }) => {
   return (
-    <Draggable key={index.toString()} draggableId={index.toString()} index={index}>
+    <Draggable key={item.name} draggableId={item.name} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}

@@ -9,7 +9,7 @@ const projectRoutes = [
       component: Project
     },
     {
-      path: "/kanban/",
+      path: "/kanban/:space",
       component: Kanban
     },
   

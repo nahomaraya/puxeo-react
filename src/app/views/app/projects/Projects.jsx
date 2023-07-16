@@ -247,8 +247,8 @@ const Projects = () => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Breadcrumb
           routeSegments={[
-            { name: "List", path: "/projects" },
-            { name: "Kanban", path: "/kanban" },
+            { name: "List", path: `/projects/${space}` },
+            { name: "Kanban", path: `/kanban/${space}` },
             { name: space, path: "/" },
           ]}
         />
