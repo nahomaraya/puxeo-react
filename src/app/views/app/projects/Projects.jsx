@@ -64,7 +64,8 @@ const Projects = () => {
   });
   const { data, setData } = useContext(DataContext);
   const priority = ["Urgent", "High", "Medium", "Low"];
-  const [status, setStatus] = useState([]);
+  const status = ["Open", "Completed", "Overdue"];
+  //const [status, setStatus] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,7 +74,7 @@ const Projects = () => {
         );
         const data = await response.data;
         const statusNames = data.data;
-        setStatus(statusNames);
+       // setStatus(statusNames);
         console.log(statusNames);
       } catch (error) {
         console.error(error);

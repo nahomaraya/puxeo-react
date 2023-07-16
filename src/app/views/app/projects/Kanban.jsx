@@ -47,7 +47,7 @@ const Kanban = () => {
   const priority = ["Urgent", "High", "Medium", "Low"];
   const status = ["Open", "Completed", "Overdue"];
 
-  const [group, setGroup] = useState("priority");
+  const [group, setGroup] = useState("status");
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,55 +56,128 @@ const Kanban = () => {
   const handleUnclick = () => {
     setAnchorEl(null);
   };
-
   const onDragEnd = (result, tasks, setTasks) => {
     if (!result.destination) return;
     const { source, destination } = result;
   
     // Get the source and destination columns
-    const sourceTasks = tasks.filter((task) => task.status === source.droppableId);
-    const destTasks = tasks.filter((task) => task.status === destination.droppableId);
+    switch (group) {
+      case "status":
+        const sourceTasksStatus = tasks.filter(
+          (task) => task.status === source.droppableId
+        );
+        const destTasksStatus = tasks.filter(
+          (task) => task.status === destination.droppableId
+        );
   
-    if (source.droppableId !== destination.droppableId) {
-      // Move task to new column
-      const sourceItems = [...sourceTasks];
-      const destItems = [...destTasks];
-      const [removed] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, removed);
+        if (source.droppableId !== destination.droppableId) {
+          // Move task to new column
+          const sourceItems = [...sourceTasksStatus];
+          const destItems = [...destTasksStatus];
+          const [removed] = sourceItems.splice(source.index, 1);
+          destItems.splice(destination.index, 0, removed);
   
-      // Update state with new columns
-      setTasks((prevTasks) => {
-        const newTasks = [...prevTasks];
-        newTasks.forEach((task, index) => {
-          if (task.status === source.droppableId) {
-            newTasks[index].order = sourceItems.findIndex((item) => item.name === task.name);
-          }
-          if (task.status === destination.droppableId) {
-            newTasks[index].order = destItems.findIndex((item) => item.name === task.name);
-          }
-          if (task.name === removed.name) {
-            newTasks[index].status = destination.droppableId;
-            newTasks[index].order = destination.index;
-          }
-        });
-        return newTasks;
-      });
-    } else {
-      // Move task within same column
-      const items = [...sourceTasks];
-      const [removed] = items.splice(source.index, 1);
-      items.splice(destination.index, 0, removed);
+          // Update state with new columns
+          setTasks((prevTasks) => {
+            const newTasks = [...prevTasks];
+            newTasks.forEach((task, index) => {
+              if (task.status === source.droppableId) {
+                newTasks[index].order = sourceItems.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+              if (task.status === destination.droppableId) {
+                newTasks[index].order = destItems.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+              if (task.name === removed.name) {
+                newTasks[index].status = destination.droppableId;
+                newTasks[index].order = destination.index;
+              }
+            });
+            return newTasks;
+          });
+        } else {
+          // Move task within same column
+          const items = [...sourceTasksStatus];
+          const [removed] = items.splice(source.index, 1);
+          items.splice(destination.index, 0, removed);
   
-      // Update state with new column
-      setTasks((prevTasks) => {
-        const newTasks = [...prevTasks];
-        newTasks.forEach((task, index) => {
-          if (task.status === source.droppableId) {
-            newTasks[index].order = items.findIndex((item) => item.name === task.name);
-          }
-        });
-        return newTasks;
-      });
+          // Update state with new column
+          setTasks((prevTasks) => {
+            const newTasks = [...prevTasks];
+            newTasks.forEach((task, index) => {
+              if (task.status === source.droppableId) {
+                newTasks[index].order = items.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+            });
+            return newTasks;
+          });
+        }
+        break; // Add a break statement here
+  
+      case "priority":
+        const sourceTasksPriority = tasks.filter(
+          (task) => task.priority === source.droppableId
+        );
+        const destTasksPriority = tasks.filter(
+          (task) => task.priority === destination.droppableId
+        );
+  
+        if (source.droppableId !== destination.droppableId) {
+          // Move task to new column
+          const sourceItems = [...sourceTasksPriority];
+          const destItems = [...destTasksPriority];
+          const [removed] = sourceItems.splice(source.index, 1);
+          destItems.splice(destination.index, 0, removed);
+  
+          // Update state with new columns
+          setTasks((prevTasks) => {
+            const newTasks = [...prevTasks];
+            newTasks.forEach((task, index) => {
+              if (task.priority === source.droppableId) {
+                newTasks[index].order = sourceItems.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+              if (task.priority === destination.droppableId) {
+                newTasks[index].order = destItems.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+              if (task.name === removed.name) {
+                newTasks[index].priority = destination.droppableId;
+                newTasks[index].order = destination.index;
+              }
+            });
+            return newTasks;
+          });
+        } else {
+          // Move task within same column
+          const items = [...sourceTasksPriority];
+          const [removed] = items.splice(source.index, 1);
+          items.splice(destination.index, 0, removed);
+  
+          // Update state with new column
+          setTasks((prevTasks) => {
+            const newTasks = [...prevTasks];
+            newTasks.forEach((task, index) => {
+              if (task.priority === source.droppableId) {
+                newTasks[index].order = items.findIndex(
+                  (item) => item.name === task.name
+                );
+              }
+            });
+            return newTasks;
+          });
+        }
+        break;
+  
+      default:
+        break;
     }
   };
 
@@ -163,28 +236,52 @@ const Kanban = () => {
       >
         <Container>
           <TaskColumnStyles>
-            {status.map((statusId, index) => {
-              const filteredColumns = columns.filter(
-                (item) => item.status === statusId
-              );
-              console.log(statusId);
-              return (
-                <Droppable key={statusId} droppableId={statusId}>
-                  {(provided, snapshot) => (
-                    <TaskList
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
-                      <Title>{statusId}</Title>
-                      {filteredColumns.map((item, index) => (
-                        <KanbanCard key={index} item={item} index={index} />
-                      ))}
-                      {provided.placeholder}
-                    </TaskList>
-                  )}
-                </Droppable>
-              );
-            })}
+            {group == "status" &&
+              status.map((statusId, index) => {
+                const filteredColumns = columns.filter(
+                  (item) => item.status === statusId
+                );
+                console.log(statusId);
+                return (
+                  <Droppable key={statusId} droppableId={statusId}>
+                    {(provided, snapshot) => (
+                      <TaskList
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                      >
+                        <Title>{statusId}</Title>
+                        {filteredColumns.map((item, index) => (
+                          <KanbanCard key={index} item={item} index={index} />
+                        ))}
+                        {provided.placeholder}
+                      </TaskList>
+                    )}
+                  </Droppable>
+                );
+              })}
+            {group == "priority" &&
+              priority.map((statusId, index) => {
+                const filteredColumns = columns.filter(
+                  (item) => item.priority === statusId
+                );
+                console.log(statusId);
+                return (
+                  <Droppable key={statusId} droppableId={statusId}>
+                    {(provided, snapshot) => (
+                      <TaskList
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                      >
+                        <Title>{statusId}</Title>
+                        {filteredColumns.map((item, index) => (
+                          <KanbanCard key={index} item={item} index={index} />
+                        ))}
+                        {provided.placeholder}
+                      </TaskList>
+                    )}
+                  </Droppable>
+                );
+              })}
           </TaskColumnStyles>
         </Container>
       </DragDropContext>

@@ -53,6 +53,7 @@ const KanbanCard = ({ item, index }) => {
           <TaskInformation>
             <p>{item.subject}</p>
             <div className="secondary-details">
+            <p>{item.project}</p>
               <p>
                 <span>
                   {new Date(item.exp_end_date).toLocaleDateString('en-us', {

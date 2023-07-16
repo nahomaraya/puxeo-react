@@ -100,7 +100,7 @@ const Table2 = (props) => {
 
   return (
     <MaterialReactTable
-    style={{height: "30%"}}
+    style={{ height: '400px' }}
       {...commonTableProps}
       data={data.filter(
         (item) =>
@@ -168,7 +168,7 @@ const Table2 = (props) => {
       paginateExpandedRows={false}
       pageCount={5}
       defaultColumn={{
-        size: 30,
+        size: 25,
       }}
       
       getRowId={(originalRow) =>
@@ -206,37 +206,7 @@ const Table2 = (props) => {
               : undefined,
         },
       }}
-      cellStyle={{ fontSize: "0.7rem", padding: "1px" }}
-      headerStyle={{ fontSize: "0.7rem", padding: "1px" }}
-      
-      // renderTopToolbarCustomActions={() => (
-      //   <div
-      //     style={{
-      //       display: "flex",
-      //       justifyContent: "flex-start",
-      //       alignItems: "center",
-      //       gap: "1.25rem",
-      //     }}
-      //   >
-      //     <span
-      //       style={{
-      //         backgroundColor: `${props.color}`,
-      //         borderRadius: "0.375rem",
-      //         padding: "0.5rem",
-      //         paddingLeft: "2rem",
-      //         paddingRight: "2rem",
-      //         fontSize: "1rem",
-      //         lineHeight: "2.25rem",
-      //       }}
-      //     >
-      //       {" "}
-      //       {props.value}{" "}
-      //     </span>
-      //     <span style={{ fontSize: "1rem" }} className="texl-xl">{` ${
-      //       data.filter((item) => item[props.groupBy] === props.value).length
-      //     } tasks`}</span>
-      //   </div>
-      // )}
+      cellStyle={{ fontSize: "0.7rem", padding: "0.5px" }}
       renderDetailPanel={({ row }) => (
         <Box
           sx={{
