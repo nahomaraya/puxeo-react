@@ -228,6 +228,9 @@ const Projects = () => {
     const updatedData = data.map((item) => {
       if (item.name === task.name) {
         // update the property you want to modify
+        console.log(task.name)
+        console.log(value)
+
         return {
           ...item,
           [groupBy]: value,
@@ -235,7 +238,8 @@ const Projects = () => {
       }
       return item; // return the unchanged item for all other cases
     });
-    // setData(updatedData);
+    
+    setData(updatedData);
   };
 
   return (
@@ -243,8 +247,8 @@ const Projects = () => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Breadcrumb
           routeSegments={[
-            { name: "List", path: "/" },
-            { name: "Kanban", path: "/" },
+            { name: "List", path: "/projects" },
+            { name: "Kanban", path: "/kanban" },
             { name: space, path: "/" },
           ]}
         />
@@ -317,29 +321,24 @@ const Projects = () => {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    fontSize: "0.6rem",
+                    
+                    gap: "1.5rem"
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      gap: "1.5rem",
-                      fontSize: "0.6rem",
-                    }}
-                  >
-                    <h3 className="text-black text-xl">
+                  
+                    <h3 style={{fontSize: "1rem", marginTop: "2px"}} >
                       {project.project_name}
                     </h3>
                     <Button
+                    size="small"
+                   
                       onClick={handleAddRow}
                       variant="contained"
                       endIcon={<AddIcon />}
                     >
                       New Task
                     </Button>
-                  </div>
+                  
                 </div>
               </Accordion.Header>
               <Accordion.Body>
@@ -378,11 +377,11 @@ const Projects = () => {
                             <span
                               style={{
                               //  backgroundColor: `${props.color}`,
-                                borderRadius: "0.375rem",
-                                padding: "0.5rem",
-                                paddingLeft: "2rem",
-                                paddingRight: "2rem",
-                                fontSize: "1rem",
+                                borderRadius: "0.375px",
+                                padding: "0.5px",
+                                paddingLeft: "2px",
+                                paddingRight: "2px",
+                                fontSize: "0.8rem",
                                 lineHeight: "2.25rem",
                               }}
                             >
@@ -390,7 +389,7 @@ const Projects = () => {
                               {priorityItem}{" "}
                             </span>
                             <span
-                              style={{ fontSize: "1rem" }}
+                              style={{ fontSize: "0.8rem" }}
                               className="texl-xl"
                             >{` ${
                               data.filter(

@@ -15,33 +15,34 @@ export const DataContextProvider = ({ children }) => {
         password: "afec298ebaa3d92",
       },
     });
+    setData(initData)
 
-    if (projectName === "all") {
-      axiosWithAuth
-        .get(
-          `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]`
-        )
-        .then((response) => {
-          setData(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          setData([]);
-        });
-    } else {
-      axiosWithAuth
+    // if (projectName === "all") {
+    //   axiosWithAuth
+    //     .get(
+    //       `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]`
+    //     )
+    //     .then((response) => {
+    //       setData(response.data.data);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       setData([]);
+    //     });
+    // } else {
+    //   axiosWithAuth
 
-        .get(
-          `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]`
-        )
-        .then((response) => {
-          setData(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          setData([]);
-        });
-    }
+    //     .get(
+    //       `/api/resource/Task?fields=["name","subject","status","priority","color","is_group","type","exp_start_date","exp_end_date","expected_time","parent_task","department","total_costing_amount","total_billing_amount"]`
+    //     )
+    //     .then((response) => {
+    //       setData(response.data.data);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       setData([]);
+    //     });
+    // }
   }, [window.location.search]);
 
   return (

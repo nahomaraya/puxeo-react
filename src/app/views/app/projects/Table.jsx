@@ -95,10 +95,12 @@ const Table2 = (props) => {
     },
     onDraggingRowChange: setDraggingRow,
     state: { draggingRow },
+    
   };
 
   return (
     <MaterialReactTable
+    style={{height: "30%"}}
       {...commonTableProps}
       data={data.filter(
         (item) =>
@@ -142,10 +144,10 @@ const Table2 = (props) => {
       enableRowOrdering
       enableEditing={true}
       // onEditingRowSave={handleSaveRow}
-      enableSorting={false}
+      enableSorting
       filterFromLeafRows
-      enableRowActions
-      enableColumnActions={false}
+     
+      enableColumnActions
       positionActionsColumn="last"
       positionExpandColumn="last"
       initialState={{
